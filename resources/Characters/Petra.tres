@@ -9,9 +9,13 @@ name = "Petra \"Tříska\" Svobodová"
 age = 28
 portrait = ExtResource("1_petra_p")
 description = "IT expertka, která vidí svět v kódu. Spolehlivá, ale pod tlakem trochu nervózní."
-spawn_location = "CafeVltava"
-availability_slot = 0
 greeting_text = "Ahoj. Sleduju tvoji aktivitu už nějakou dobu. Máš zajímavý rukopis. Jestli se chceš dostat k datům MelTechu, budu tvoje oči v síti. Ale pamatuj, nejsem fanoušek násilí."
+schedule = {
+"day": "CafeVltava",
+"evening": "CafeVltava",
+"morning": "",
+"night": ""
+}
 role = "Hacker"
 hiring_cost = 8000
 loot_share_percent = 25

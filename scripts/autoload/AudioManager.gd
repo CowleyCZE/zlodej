@@ -49,3 +49,7 @@ func play_phone_ring():
 		play_ui(phone_ring_sound, -5.0)
 	else:
 		print("AUDIO: Phone ring placeholder sound!")
+
+func stop_phone_ring():
+	if ui_player and ui_player.playing:
+		ui_player.stop()

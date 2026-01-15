@@ -9,9 +9,13 @@ name = "Josef \"Pepík\" Novák"
 age = 41
 portrait = ExtResource("1_josef_p")
 description = "Zkušený řidič, který má nový Range Rover a rád si přivydělá."
-spawn_location = "CernyOrel"
-availability_slot = 1
 greeting_text = "Zdar šéfe. Jestli hledáš někoho, kdo protáhne káru mělnickýma uličkama a nezastaví ho ani hlídka na mostě, tak jsi na správný adrese. Moje kára je připravená, ale zadarmo nejezdím."
+schedule = {
+"day": "",
+"evening": "CernyOrel",
+"morning": "",
+"night": "CernyOrel"
+}
 role = "Řidič"
 hiring_cost = 5000
 loot_share_percent = 20

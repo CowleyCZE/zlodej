@@ -7,10 +7,16 @@ extends Resource
 @export var portrait: Texture2D
 @export_multiline var description: String
 @export_multiline var greeting_text: String # New: Dialog when meeting in location
-@export var spawn_location: String # e.g. "CernyOrel", "CafeVltava"
 
-enum TimeSlot { DAY, NIGHT, ALWAYS }
-@export var availability_slot: TimeSlot = TimeSlot.ALWAYS
+# Rozvrh (Schedule)
+# Klíče: "morning" (6-12), "day" (12-18), "evening" (18-24), "night" (0-6)
+# Hodnoty: ID lokace (např. "CernyOrel") nebo "" (nedostupný/doma)
+@export var schedule: Dictionary = {
+	"morning": "",
+	"day": "",
+	"evening": "CernyOrel",
+	"night": "CernyOrel"
+}
 
 # Profesní
 @export var role: String # driver, hacker, thief...

@@ -9,9 +9,13 @@ name = "Milan \"Grizzly\" Kovářík"
 age = 55
 portrait = ExtResource("1_milan_p")
 description = "Bývalý vyhazovač se silou medvěda. Půjde do toho pro prachy, ale nečekej, že tě bude krýt."
-spawn_location = "Staveniste"
-availability_slot = 0
 greeting_text = "Co chceš? Jestli práci, tak mluv. Já sem ten, co vykopne dveře, když se zaseknou. Ale varuju tě, nezkoušej mě ojebat o podíl, jasný?"
+schedule = {
+"day": "Staveniste",
+"evening": "CernyOrel",
+"morning": "Staveniste",
+"night": ""
+}
 role = "Silák"
 hiring_cost = 6000
 loot_share_percent = 15

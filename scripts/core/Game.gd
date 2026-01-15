@@ -14,6 +14,14 @@ func _ready():
 	if dialogue_packed:
 		var dialogue = dialogue_packed.instantiate()
 		$CanvasLayer.add_child(dialogue)
+		
+	# Add Phone UI for Story Events
+	var phone_packed = load("res://scenes/ui/PhoneUI.tscn")
+	if phone_packed:
+		var phone_ui = phone_packed.instantiate()
+		$CanvasLayer.add_child(phone_ui)
+		if has_node("/root/StoryManager"):
+			get_node("/root/StoryManager").register_phone_ui(phone_ui)
 	
 	# Listen to GameManager state changes
 	GameManager.state_changed.connect(_on_game_manager_state_changed)
