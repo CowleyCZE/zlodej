@@ -4,13 +4,16 @@ extends Node2D
 @onready var miss_list = $UI/SidePanel/Margin/VBox/MissList
 @onready var btn_planning = $UI/SidePanel/Margin/VBox/Btn_StartPlanning
 @onready var markers_node = $Markers
+@onready var rain_particles = $RainOverlay
 
 func _ready():
 	ProgressManager.mission_unlocked.connect(func(_id): _refresh_ui())
 	MapEventManager.events_updated.connect(_refresh_ui)
+	WeatherManager.weather_changed.connect(_on_weather_changed)
 	
 	_setup_signals()
 	_refresh_ui()
+	_on_weather_changed(WeatherManager.current_weather)
 
 func _setup_signals():
 	# Connect Location Buttons in Sidebar
@@ -51,8 +54,6 @@ func _refresh_ui():
 			_animate_marker(marker, event.type)
 		else:
 			marker.modulate = Color.WHITE
-			if marker.has_node("AnimationPlayer"):
-				marker.get_node("AnimationPlayer").stop()
 
 func _update_location_ui(loc_id: String, base_name: String):
 	if not loc_list.has_node(loc_id): return
@@ -73,8 +74,7 @@ func _update_location_ui(loc_id: String, base_name: String):
 			MapEventManager.EventType.MARKET_SALE:
 				btn.modulate = Color.GREEN
 
-func _animate_marker(marker: Node2D, type: int):
-	# Simple visual feedback for events on the map
+func _animate_marker(marker: Node, type: int):
 	match type:
 		MapEventManager.EventType.POLICE_RAID:
 			marker.modulate = Color.RED
@@ -83,9 +83,22 @@ func _animate_marker(marker: Node2D, type: int):
 		_:
 			marker.modulate = Color.CYAN
 
-func _on_location_pressed(location_id: String):
-	print("WorldMap_2D: Otevírám lokaci skrze SidePanel: ", location_id)
+func _on_weather_changed(weather: WeatherManager.WeatherType):
+	if not rain_particles: return
 	
+	match weather:
+		WeatherManager.WeatherType.RAIN:
+			rain_particles.emitting = true
+			# Fog effect via modulate? Or separate node
+			modulate = Color(0.8, 0.8, 1.0) # Cold blue tint
+		WeatherManager.WeatherType.FOG:
+			rain_particles.emitting = false
+			modulate = Color(0.7, 0.7, 0.7) # Desaturated/Grey
+		WeatherManager.WeatherType.CLEAR:
+			rain_particles.emitting = false
+			modulate = Color.WHITE
+
+func _on_location_pressed(location_id: String):
 	var location_name = location_id
 	match location_id:
 		"CernyOrel": location_name = "Hospoda U Černého Orla"
@@ -95,12 +108,10 @@ func _on_location_pressed(location_id: String):
 	var view_packed = load("res://scenes/ui/LocationView.tscn")
 	if view_packed:
 		var view = view_packed.instantiate()
-		$UI.add_child(view) # Add to UI layer
+		$UI.add_child(view)
 		view.setup(location_id, location_name)
 
 func _on_mission_marker_pressed(mission_id: String):
-	print("WorldMap_2D: Výběr mise: ", mission_id)
-	
 	var mission_data: MissionData = null
 	for m in MissionDB.missions:
 		if m.mission_id == mission_id:
@@ -114,8 +125,6 @@ func _on_mission_marker_pressed(mission_id: String):
 			$UI.add_child(popup)
 			popup.setup(mission_data)
 			popup.planning_started.connect(_start_planning)
-	else:
-		push_error("WorldMap_2D: Mise s ID " + mission_id + " nebyla nalezena!")
 
 func _start_planning(mission_data: MissionData):
 	GameManager.set_current_level(mission_data.target_location)

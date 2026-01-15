@@ -5,6 +5,7 @@ extends Control
 @onready var lbl_wallet = $HBox/Wallet
 @onready var lbl_heat = $HBox/Heat
 @onready var lbl_time = $HBox/TimeLabel
+@onready var lbl_weather = $HBox/WeatherLabel
 @onready var btn_wait = $HBox/Btn_Wait
 
 func _ready():
@@ -14,12 +15,14 @@ func _ready():
 	_update_reputation(GameManager.reputation)
 	_update_heat(GameManager.heat_levels["melnik"])
 	_update_time(TimeManager.current_slot)
+	_update_weather(WeatherManager.current_weather)
 	
 	# Connect signals for reactivity
 	EventBus.wallet_changed.connect(_update_wallet)
 	EventBus.reputation_changed.connect(_update_reputation)
 	EventBus.heat_level_changed.connect(_update_heat)
 	TimeManager.time_changed.connect(_update_time)
+	WeatherManager.weather_changed.connect(_update_weather)
 	
 	btn_wait.pressed.connect(func(): TimeManager.advance_time())
 
@@ -31,6 +34,17 @@ func _update_time(slot: TimeManager.TimeSlot):
 		lbl_time.modulate = Color(0.5, 0.5, 1.0)
 	else:
 		lbl_time.modulate = Color(1.0, 1.0, 0.8)
+
+func _update_weather(weather: WeatherManager.WeatherType):
+	lbl_weather.text = "[%s]" % WeatherManager.get_weather_string()
+	
+	match weather:
+		WeatherManager.WeatherType.RAIN:
+			lbl_weather.modulate = Color.CORNFLOWER_BLUE
+		WeatherManager.WeatherType.FOG:
+			lbl_weather.modulate = Color.LIGHT_GRAY
+		_:
+			lbl_weather.modulate = Color.WHITE
 
 func _update_wallet(amount: int):
 	lbl_wallet.text = "Peníze: %d CZK" % amount
@@ -51,4 +65,4 @@ func _update_heat(amount: float):
 	elif amount > 50:
 		lbl_heat.add_theme_color_override("font_color", Color.ORANGE)
 	else:
-		lbl_heat.add_theme_color_override("font_color", Color.html("#ff3333"))
+		lbl_heat.add_theme_color_override("font_color", Color.WHITE)

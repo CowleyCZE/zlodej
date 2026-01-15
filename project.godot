@@ -30,6 +30,7 @@ AudioManager="*res://scripts/autoload/AudioManager.gd"
 PerformanceManager="*res://scripts/autoload/PerformanceManager.gd"
 TimeManager="*res://scripts/autoload/TimeManager.gd"
 MapEventManager="*res://scripts/autoload/MapEventManager.gd"
+WeatherManager="*res://scripts/autoload/WeatherManager.gd"
 StoryManager="*res://scripts/autoload/StoryManager.gd"
 MissionDB="*res://data/MissionLoader.gd"
 
