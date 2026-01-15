@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="InventoryItem" load_steps=2 format=3 uid="uid://item_crowbar"]
+
+[ext_resource type="Script" path="res://scripts/resources/InventoryItem.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "crowbar"
+name = "Páčidlo"
+description = "Hrubá síla pro otevírání dveří a beden. Hlučné."
+weight = 2.0
+price = 300
+is_stackable = false
+max_stack = 1
+item_type = "tool"

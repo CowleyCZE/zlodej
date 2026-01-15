@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://awareness_meter_v1"]
+
+[node name="AwarenessMeter" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -32.0
+offset_top = -40.0
+offset_right = 32.0
+offset_bottom = -30.0
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 1
+show_percentage = false
+
+[node name="StateIcon" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = 24.0
+offset_top = -12.0
+offset_right = 40.0
+offset_bottom = 4.0
+rotation = 0.785398
+color = Color(1, 1, 0, 0)

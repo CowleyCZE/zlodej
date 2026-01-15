@@ -1,0 +1,56 @@
+[gd_scene load_steps=4 format=3 uid="uid://hacking_terminal_v2"]
+
+[ext_resource type="Script" path="res://scripts/objects/HackingTerminal.gd" id="1_script"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(40, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_area"]
+size = Vector2(80, 80)
+
+[node name="HackingTerminal" type="Node2D"]
+script = ExtResource("1_script")
+object_name = "Terminál MelTech"
+
+[node name="Visual" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -30.0
+offset_right = 20.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0.1, 0.15, 1)
+
+[node name="Screen" type="ColorRect" parent="Visual"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 35.0
+offset_bottom = 25.0
+color = Color(0, 0.5, 0, 1)
+
+[node name="Label" type="Label" parent="."]
+offset_left = -40.0
+offset_top = -55.0
+offset_right = 40.0
+offset_bottom = -32.0
+theme_override_font_sizes/font_size = 12
+text = "HACK (F)"
+horizontal_alignment = 1
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("RectangleShape2D_1")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_area")

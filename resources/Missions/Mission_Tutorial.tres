@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="MissionData" load_steps=2 format=3 uid="uid://mission_tutorial_res"]
+
+[ext_resource type="Script" path="res://resources/Missions/Mission_Tutorial.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+mission_id = "mission_tutorial"
+name = "Vloupačka nanečisto"
+description = "Tréninková mise v opuštěném skladu MelTech."
+briefing = "Cíl: Dostaň se dovnitř, seber data z terminálu a zmiz."
+region_id = "melnik_industrial"
+target_location = "res://scenes/levels/Level_Tutorial.tscn"
+difficulty = 1
+min_reputation = 0
+base_reward = 5000
+objective_type = "steal_data"
+guard_count = 1
+camera_count = 1

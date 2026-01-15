@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://player_agent_v3"]
+
+[ext_resource type="Script" path="res://scripts/agents/PlayerAgent.gd" id="1_agent"]
+[ext_resource type="Texture2D" uid="uid://b8j2s4s5f6j7k" path="res://icon.svg" id="2_icon"]
+[ext_resource type="Script" path="res://scripts/core/TacticalCamera.gd" id="3_camera"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
+radius = 32.0
+
+[node name="PlayerAgent" type="CharacterBody2D"]
+script = ExtResource("1_agent")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_icon")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_1")
+
+[node name="InteractionZone" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionZone"]
+shape = SubResource("CircleShape2D_1")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = -27.0
+text = "Agent"
+horizontal_alignment = 1
+
+[node name="TacticalCamera" type="Camera2D" parent="." node_paths=PackedStringArray("target")]
+script = ExtResource("3_camera")
+target = NodePath("..")

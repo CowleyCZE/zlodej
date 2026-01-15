@@ -1,0 +1,29 @@
+[gd_scene load_steps=6 format=3 uid="uid://guard_v2"]
+
+[ext_resource type="Script" path="res://scripts/objects/Guard.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://icon.svg" id="2_icon"]
+[ext_resource type="PackedScene" path="res://scenes/objects/VisionCone.tscn" id="3_vision"]
+[ext_resource type="PackedScene" uid="uid://awareness_meter_v1" path="res://scenes/ui/AwarenessMeter.tscn" id="4_meter"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
+radius = 16.0
+
+[node name="Guard" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 0, 0, 1)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_icon")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_1")
+
+[node name="VisionCone" parent="." instance=ExtResource("3_vision")]
+
+[node name="AwarenessMeter" parent="." instance=ExtResource("4_meter")]
+offset_top = -50.0
+offset_bottom = -40.0
+visible = false

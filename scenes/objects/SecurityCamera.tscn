@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://security_camera_v1"]
+
+[ext_resource type="Script" path="res://scripts/objects/SecurityCamera.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://icon_svg" path="res://icon.svg" id="2_texture"]
+[ext_resource type="PackedScene" path="res://scenes/objects/VisionCone.tscn" id="3_vision"]
+
+[node name="SecurityCamera" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Body" type="Sprite2D" parent="."]
+modulate = Color(0.3, 0.3, 0.3, 1)
+scale = Vector2(0.4, 0.2)
+texture = ExtResource("2_texture")
+offset = Vector2(30, 0)
+
+[node name="Lens" type="ColorRect" parent="Body"]
+offset_left = 40.0
+offset_top = -20.0
+offset_right = 60.0
+offset_bottom = 20.0
+color = Color(0.8, 0, 0, 1)
+
+[node name="VisionCone" parent="." instance=ExtResource("3_vision")]
+z_index = -1
+color = Color(1, 0, 0, 0.2)
+radius = 250.0
+angle_deg = 40.0

@@ -1,0 +1,46 @@
+[gd_scene load_steps=5 format=3 uid="uid://c8v6s8v7b6k6n"]
+
+[ext_resource type="Script" path="res://scripts/objects/LootCrate.gd" id="1_loot"]
+[ext_resource type="Material" path="res://assets/materials/wood_crate.tres" id="2_wood"]
+[ext_resource type="Material" path="res://assets/materials/iron_reinforcement.tres" id="3_iron"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1"]
+size = Vector3(1, 1, 1)
+
+[node name="LootCrate" type="StaticBody3D"]
+collision_layer = 3
+script = ExtResource("1_loot")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_1")
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="MainBox" type="CSGBox3D" parent="Visuals"]
+material_override = ExtResource("2_wood")
+size = Vector3(0.9, 0.9, 0.9)
+
+[node name="IronBand_H" type="CSGBox3D" parent="Visuals"]
+material_override = ExtResource("3_iron")
+size = Vector3(0.95, 0.1, 0.95)
+
+[node name="IronBand_V1" type="CSGBox3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35, 0, 0)
+material_override = ExtResource("3_iron")
+size = Vector3(0.1, 0.95, 0.95)
+
+[node name="IronBand_V2" type="CSGBox3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.35, 0, 0)
+material_override = ExtResource("3_iron")
+size = Vector3(0.1, 0.95, 0.95)
+
+[node name="LockBody" type="CSGBox3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.48)
+material_override = ExtResource("3_iron")
+size = Vector3(0.15, 0.15, 0.05)
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+billboard = 1
+text = "LOOT (F)"
+font_size = 24

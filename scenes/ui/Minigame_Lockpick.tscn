@@ -1,0 +1,143 @@
+[gd_scene load_steps=6 format=3 uid="uid://cxv6s8v7b6k6l"]
+
+[ext_resource type="Script" path="res://scripts/ui/Minigame_Lockpick.gd" id="1_lp"]
+[ext_resource type="Texture2D" path="res://resources/lock_metal_texture.tres" id="2_metal"]
+[ext_resource type="Texture2D" path="res://resources/pick_texture.tres" id="3_pick"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Outer"]
+bg_color = Color(0.2, 0.2, 0.2, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.1, 0.1, 0.1, 1)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+
+[node name="MinigameLockpick" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lp")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.823529)
+
+[node name="LockContainer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CylinderOuter" type="Panel" parent="LockContainer"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -110.0
+offset_top = -110.0
+offset_right = 110.0
+offset_bottom = 110.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Outer")
+
+[node name="Cylinder" type="TextureRect" parent="LockContainer"]
+clip_children = 2
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -80.0
+offset_right = 80.0
+offset_bottom = 80.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(80, 80)
+texture = ExtResource("2_metal")
+expand_mode = 1
+
+[node name="Keyhole" type="ColorRect" parent="LockContainer/Cylinder"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -5.0
+offset_top = -40.0
+offset_right = 5.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Pick" type="TextureRect" parent="LockContainer"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -4.0
+offset_top = -180.0
+offset_right = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(4, 180)
+texture = ExtResource("3_pick")
+expand_mode = 1
+
+[node name="Instructions" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 50.0
+offset_right = 200.0
+offset_bottom = 100.0
+grow_horizontal = 2
+text = "PÁČENÍ ZÁMKU
+Pohybuj myší pro nastavení paklíče.
+Drž LEVÉ TLAČÍTKO nebo ŠIPKU VPRAVO pro otočení."
+horizontal_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -100.0
+offset_right = 100.0
+offset_bottom = -50.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1

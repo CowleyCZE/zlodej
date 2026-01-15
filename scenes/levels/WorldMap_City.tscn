@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://tl60wf8463t7"]
+
+[node name="WorldMap_City" type="Node3D"]
+
+[node name="NightEnvironment" type="WorldEnvironment" parent="."]
+
+[node name="Moon" type="DirectionalLight3D" parent="."]
+light_color = Color(0.75686276, 0.8745098, 0.9411765, 1)
+light_energy = 0.2
+shadow_enabled = true
+
+[node name="CityLayout" type="GridMap" parent="."]
+collision_layer = 2
+
+[node name="Landmarks" type="Node3D" parent="."]
+
+[node name="HotelAugustine_Exterior" type="MeshInstance3D" parent="Landmarks"]
+lod_bias = 0.5
+
+[node name="PragueCastle_Vista" type="MeshInstance3D" parent="Landmarks"]
+
+[node name="InteractionPoints" type="Node3D" parent="."]
+
+[node name="Entry_Shop" type="Area3D" parent="InteractionPoints"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionPoints/Entry_Shop"]
+
+[node name="Entry_Pub" type="Area3D" parent="InteractionPoints"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionPoints/Entry_Pub"]
+
+[node name="NavRegion" type="NavigationRegion3D" parent="."]
+
+[node name="PlayerStart" type="Marker3D" parent="."]
+
+[node name="Labels" type="Node3D" parent="."]
+
+[node name="MetroSign" type="Label3D" parent="Labels"]
+text = "Metro: Můstek"
+
+[node name="PubSign" type="Label3D" parent="Labels"]
+text = "Hospoda U Fleků"
+
+[node name="BazarSign" type="Label3D" parent="Labels"]
+text = "AUTOBAZAR SMÍCHOV"

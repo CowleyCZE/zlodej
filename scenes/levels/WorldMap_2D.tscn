@@ -1,0 +1,162 @@
+[gd_scene load_steps=4 format=3 uid="uid://b2d_map_placeholder"]
+
+[ext_resource type="Script" path="res://scripts/ui/WorldMap_2D.gd" id="1_map_script"]
+[ext_resource type="PackedScene" uid="uid://adv_hud_v1" path="res://scenes/ui/AdventureHUD.tscn" id="2_hud"]
+[ext_resource type="Texture2D" path="res://assets/ui/map_melnik_2025.png" id="3_map_tex"]
+
+[node name="WorldMap2D" type="Node2D"]
+script = ExtResource("1_map_script")
+
+[node name="Background" type="TextureRect" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = ExtResource("3_map_tex")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="RegionLines" type="Node2D" parent="."]
+modulate = Color(0, 1, 1, 0.2)
+
+[node name="Line1" type="Line2D" parent="RegionLines"]
+points = PackedVector2Array(600, 0, 600, 1080)
+width = 1.0
+
+[node name="Line2" type="Line2D" parent="RegionLines"]
+points = PackedVector2Array(1300, 0, 1300, 1080)
+width = 1.0
+
+[node name="Line3" type="Line2D" parent="RegionLines"]
+points = PackedVector2Array(0, 450, 1920, 450)
+width = 1.0
+
+[node name="Markers" type="Node2D" parent="."]
+
+[node name="CernyOrel" type="ColorRect" parent="Markers"]
+offset_left = 350.0
+offset_top = 270.0
+offset_right = 365.0
+offset_bottom = 285.0
+color = Color(0, 1, 1, 1)
+
+[node name="CafeVltava" type="ColorRect" parent="Markers"]
+offset_left = 750.0
+offset_top = 220.0
+offset_right = 765.0
+offset_bottom = 235.0
+color = Color(0, 1, 1, 1)
+
+[node name="Staveniste" type="ColorRect" parent="Markers"]
+offset_left = 1150.0
+offset_top = 270.0
+offset_right = 1165.0
+offset_bottom = 285.0
+color = Color(0, 1, 1, 1)
+
+[node name="Hrad" type="ColorRect" parent="Markers"]
+offset_left = 350.0
+offset_top = 370.0
+offset_right = 365.0
+offset_bottom = 385.0
+color = Color(1, 1, 0, 1)
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="AdventureHUD" parent="UI" instance=ExtResource("2_hud")]
+
+[node name="MapTitle" type="Label" parent="UI"]
+offset_left = 40.0
+offset_top = 80.0
+offset_right = 712.0
+offset_bottom = 141.0
+theme_override_colors/font_color = Color(0, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 32
+text = "TERMINÁL: MĚLNÍK SÍŤ [2025]"
+
+[node name="SidePanel" type="Panel" parent="UI"]
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -350.0
+offset_top = 60.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="UI/SidePanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBox" type="VBoxContainer" parent="UI/SidePanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="LabelLocations" type="Label" parent="UI/SidePanel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "> AKTIVNÍ LOKACE"
+
+[node name="LocList" type="VBoxContainer" parent="UI/SidePanel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="CernyOrel" type="Button" parent="UI/SidePanel/Margin/VBox/LocList"]
+layout_mode = 2
+text = "Hospoda U Černého Orla"
+alignment = 0
+
+[node name="CafeVltava" type="Button" parent="UI/SidePanel/Margin/VBox/LocList"]
+layout_mode = 2
+text = "Café Vltava"
+alignment = 0
+
+[node name="Staveniste" type="Button" parent="UI/SidePanel/Margin/VBox/LocList"]
+layout_mode = 2
+text = "Staveniště U Dubu"
+alignment = 0
+
+[node name="HSeparator" type="HSeparator" parent="UI/SidePanel/Margin/VBox"]
+layout_mode = 2
+
+[node name="LabelMissions" type="Label" parent="UI/SidePanel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "> DOSTUPNÉ OPERACE"
+
+[node name="MissList" type="VBoxContainer" parent="UI/SidePanel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Tutorial" type="Button" parent="UI/SidePanel/Margin/VBox/MissList"]
+layout_mode = 2
+text = "Mise: Sklad MelTech"
+alignment = 0
+
+[node name="MelTech" type="Button" parent="UI/SidePanel/Margin/VBox/MissList"]
+layout_mode = 2
+text = "Mise: Šifrovací Disk"
+alignment = 0
+
+[node name="Spacer" type="Control" parent="UI/SidePanel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Btn_StartPlanning" type="Button" parent="UI/SidePanel/Margin/VBox"]
+modulate = Color(0, 1, 0, 1)
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "ZAHÁJIT PLÁNOVÁNÍ"

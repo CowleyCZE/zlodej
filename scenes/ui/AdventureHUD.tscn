@@ -1,0 +1,98 @@
+[gd_scene load_steps=2 format=3 uid="uid://adv_hud_v1"]
+
+[ext_resource type="Script" path="res://scripts/ui/AdventureHUD.gd" id="1_hud_script"]
+
+[node name="AdventureHUD" type="Control"]
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 60.0
+grow_horizontal = 2
+script = ExtResource("1_hud_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0509804, 0.105882, 0.164706, 0.862745)
+
+[node name="Line" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -2.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0, 0.4, 1, 0.5)
+
+[node name="HBox" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_right = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 30
+
+[node name="PlayerName" type="Label" parent="HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "JMÉNO"
+vertical_alignment = 1
+
+[node name="VSeparator" type="VSeparator" parent="HBox"]
+layout_mode = 2
+
+[node name="Reputation" type="Label" parent="HBox"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "Reputace: 0"
+vertical_alignment = 1
+
+[node name="Heat" type="Label" parent="HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.2, 0.2, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "Hledanost: 0%"
+vertical_alignment = 1
+
+[node name="VSeparator2" type="VSeparator" parent="HBox"]
+layout_mode = 2
+
+[node name="TimeLabel" type="Label" parent="HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 18
+text = "DEN"
+vertical_alignment = 1
+
+[node name="Btn_Wait" type="Button" parent="HBox"]
+custom_minimum_size = Vector2(100, 35)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 14
+text = "POČKAT"
+
+[node name="Spacer" type="Control" parent="HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Wallet" type="Label" parent="HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.960784, 0.772549, 0.0941176, 1)
+theme_override_font_sizes/font_size = 22
+text = "Peníze: 0 CZK"
+vertical_alignment = 1
+pivot_offset = Vector2(100, 15)

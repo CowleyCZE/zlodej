@@ -1,0 +1,76 @@
+[gd_scene load_steps=2 format=3 uid="uid://dce6s8v7b6k6p"]
+
+[ext_resource type="PackedScene" path="res://scenes/objects/LootCrate_Advanced.tscn" id="1_crate"]
+[ext_resource type="PackedScene" path="res://scenes/objects/ExtractionZone.tscn" id="2_exit"]
+
+[node name="Level_HotelAugustine" type="Node3D"]
+
+[node name="Geometry" type="Node3D" parent="."]
+
+[node name="Building" type="CSGCombiner3D" parent="Geometry"]
+use_collision = true
+
+[node name="Floor" type="CSGBox3D" parent="Geometry/Building"]
+size = Vector3(40, 0.5, 40)
+
+[node name="MainWall_Front" type="CSGBox3D" parent="Geometry/Building"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 20)
+size = Vector3(40, 4, 1)
+
+[node name="MainWall_Back" type="CSGBox3D" parent="Geometry/Building"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -20)
+size = Vector3(40, 4, 1)
+
+[node name="MainWall_Left" type="CSGBox3D" parent="Geometry/Building"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 2, 0)
+size = Vector3(1, 4, 40)
+
+[node name="MainWall_Right" type="CSGBox3D" parent="Geometry/Building"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 2, 0)
+size = Vector3(1, 4, 40)
+
+[node name="Room1" type="CSGBox3D" parent="Geometry/Building"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 2, -10)
+operation = 2
+size = Vector3(15, 4, 15)
+
+[node name="Zones" type="Node3D" parent="."]
+
+[node name="ZoneA" type="Marker3D" parent="Zones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1824818, 5)
+
+[node name="VaultLocation" type="Marker3D" parent="Zones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.5, -10)
+
+[node name="Lights" type="Node3D" parent="."]
+
+[node name="LobbyLight" type="OmniLight3D" parent="Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+omni_range = 10.0
+
+[node name="RoomLight" type="OmniLight3D" parent="Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 3, -10)
+omni_range = 7.0
+
+[node name="LootCrate" parent="." instance=ExtResource("1_crate")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.5, -10)
+money_amount = 1000
+
+[node name="LockedCrate" parent="." instance=ExtResource("1_crate")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.5, -10)
+money_amount = 5000
+is_locked = true
+lock_difficulty = 1.5
+
+[node name="ExitZone" parent="." instance=ExtResource("2_exit")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15)
+
+[node name="NPCs" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2615104, 0)
+
+[node name="Decals" type="Node3D" parent="."]
+
+[node name="HotelName" type="Label3D" parent="Decals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 20.563353)
+text = "HOTEL AUGUSTINE"
+font_size = 64

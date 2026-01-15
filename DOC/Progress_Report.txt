@@ -1,0 +1,94 @@
+PROJEKT: ZLODĚJ MĚLNÍK - AKTUALIZACE POSTUPU
+==============================================
+Poslední aktualizace: 13. ledna 2026
+
+MILNÍK: IMPLEMENTACE JÁDRA LOUPEŽNÝCH MECHANIK (HEIST CORE)
+-----------------------------------------------------------
+Úspěšně implementována hluboká integrace plánovacích, simulačních a RPG prvků podle zadání.
+
+PROVEDENÉ ZMĚNY:
+1.  DATOVÉ STRUKTURY:
+    *   MissionData: Přidán intel systém (skrytá adresa, známá fakta, entry pointy).
+    *   CharacterData: Implementována ekonomika týmu (záloha při najmutí, procentuální podíl z lupu).
+    *   InventoryItem: Přidány simulované statistiky (hlučnost nástroje, rychlostní modifikátor).
+    *   PlanningData: Rozšířeno o logiku synchronizace (čekání na signály mezi členy týmu).
+
+2.  PLÁNOVACÍ FÁZE (ROUTE EDITOR):
+    *   PlanningManager: Implementována logika pro manuální úpravu časové osy, přiřazování nástrojů k akcím a validaci inventáře.
+    *   GhostRunController: Přidána podpora pro dynamické zpoždění (Effective Time logic) – simulace nyní reaguje na "WAIT" akce v plánu.
+    *   Automatická extrakce akcí: Systém při nahrávání trasy automaticky rozpozná interakci s objektem a vytvoří událost v plánu.
+
+3.  UI & UX (INSPIROVÁNO "THE CLUE!"):
+    *   TimelinePanel & TimelineTrack: Vizuální zobrazení plánu všech postav.
+    *   ActionEditorPopup: Kontextový editor pro úpravu akcí (výběr nástroje, nastavení synchronizačních signálů).
+    *   Dokumentace (UI/UX + GDD): Aktualizována na třípásmový layout (Mozek/Svět/Ovladač) a Blueprint styl pro taktiku.
+
+4.  SIMULACE A AI:
+    *   InteractiveObject: Rozšířeno o podporu různých nástrojů s vlivem na hlučnost.
+    *   Guard AI: Stráže nyní během simulace hlídkují a reagují na hluk generovaný nástroji hráče.
+    *   Synchronizace exekuce: Agent v playbacku reálně provádí akce v čase definovaném na časové ose.
+
+6.  INTELLIGENCE GATHERING SYSTÉM (SBĚR INFORMACÍ):
+    *   Vytvořen `IntelligenceGatheringSystem.gd`: Centralizovaná logika pro nákup plánů a sběr informací.
+    *   Propojení s Heat Systemem: Každá akce (koupě plánů, hacking, úplatky) nyní zvyšuje Heat Level.
+    *   UI Update: Refaktorován `IntelPopup.gd` pro dynamické zobrazování cen a rizika (Heat).
+
+STAV PROJEKTU:
+*   Projekt je stabilní a spustitelný.
+*   Základní mechanika "Nahrát -> Upravit -> Simulovat" je plně funkční.
+*   Adventure Mode je propojen s Planning Mode skrze sběr informací (Intel) a riziko (Heat).
+*   Implementován cyklus: Sběr intelu -> Zvýšení Heatu -> Decay v čase.
+
+15. DIALOGOVÝ SYSTÉM A NARRATIVE (ADVENTURE):
+    *   Implementován `DialogueSystem.gd`: Podpora pro typewriter efekt, volby a portréty.
+    *   Rozšířen `CharacterData.gd`: Přidána vlastnost `greeting_text` pro každou postavu.
+    *   Aktualizace lokací: V `LocationView.gd` přidáno tlačítko "MLUVIT", které spouští interakci s postavou.
+    *   Integrace: `DialogueSystem` je trvale dostupný v hlavní scéně `Game.tscn` a reaguje na signály EventBusu.
+    *   Obsah: Doplněny unikátní dialogy pro Josefa, Petru a Milana vystihující jejich osobnost.
+
+STAV PROJEKTU:
+*   Hra má funkční narativní prvek. Hráč se může před najmutím člena týmu dozvědět více o jeho motivaci.
+*   Kompletní loop je nyní obohacen o RPG interakce v lokacích.
+
+16. PERZISTENCE A SYSTÉM UKLÁDÁNÍ (SAVE SYSTEM):
+    *   Finalizován `SaveManager.gd`: Komplexní ukládání a načítání stavu hry (Player, Economy, Inventory, Progress, Adventure, Mission Intel).
+    *   Integrace Auto-save: Systém automaticky ukládá při klíčových událostech (nákup, najmutí, intel, změna jména, splnění mise).
+    *   Optimalizace: `InventoryManager` rozšířen o metody pro efektivní hromadné načítání bez redundantních validací.
+    *   Verifikace: Vytvořen automatizovaný test `SaveTest.gd`, který potvrzuje integritu dat po cyklu Save/Load.
+
+17. POLISHING A AUDIO FEEDBACK:
+    *   Audio Standardy (ADD): `AudioManager.gd` rozšířen o podporu UI zvuků a variabilní pitch pro SFX.
+    *   Dialogue Barks: Implementovány zvukové "blipy" během psaní textu a podpora pro unikátní pozdravy postav (`greeting_audio`).
+    *   Character Personalization: `CharacterData.gd` rozšířen o vlastnosti `voice_pitch` a `greeting_audio` pro unikátní zvukový projev každé postavy.
+
+18. TUTORIAL A ONBOARDING POLISH (MĚLNÍK 2025):
+    *   FIX: `HackingTerminal` kompletně přepsán do 2D (původně 3D) a integrován jako `InteractiveObject`.
+    *   LEVEL DESIGN: `Level_Tutorial.tscn` aktualizován o `ExtractionZone` a `HackingTerminal`.
+    *   STORY INTEGRACE: `Honza.tres` (Fixer) vytvořen a integrován do `AdventureManager`.
+    *   MAPA: `WorldMap_2D` nyní dynamicky reaguje na odemčení misí skrze nový signál v `ProgressManager`.
+    *   UI: `LocationView` nyní správně zobrazuje Honzu po telefonátu a respektuje příznak `is_hirable`.
+
+19. VERIFIKACE A BUGFIXING (14. ledna 2026):
+    *   TESTY: Vytvořena sada automatizovaných testů (`FlowTest.gd`, `PlanningTest.gd`) pokrývající onboarding, story eventy a synchronizaci v plánování.
+    *   FIX: `DialogueSystem.gd` - opravena kritická chyba s lambda capture u typewriter efektu.
+    *   FIX: `InteractiveObject.gd` - opravena logika validace nástrojů a odstraněna varování.
+    *   VYLEPŠENÍ: `PlanningManager.gd` - implementován dynamický výpočet trvání akce podle dovedností postavy.
+    *   VERIFIKACE: Potvrzena funkčnost Ghost Run simulace a vizuálního feedbacku detekce v Blueprintu.
+
+20. ADVANCED STEALTH & RPG SYSTÉMY (14. ledna 2026):
+    *   BOJ: Implementován Letální vs. Neletální přístup (Taser, Nůž, Pistole). Stráže mají stavy `STUNNED` a `DEAD` s odpovídajícím vlivem na Heat Level.
+    *   HLUK: Vytvořen komplexní Noise System. Pohyb (běh vs plížení) a nástroje (páčidlo) emitují hluk, na který stráže reagují.
+    *   ČAS: Implementován `TimeManager` (DEN/NOC). Postavy mají dynamické rozvrhy (např. Josef je v hospodě jen v noci).
+    *   EVENTY: Vytvořen `MapEventManager` pro náhodné události (Policejní zátah, Slevy). Zátah v lokaci nyní penalizuje hráče zvýšením Heatu.
+    *   VÝSLEDKY: Finalizována obrazovka `ResultScreen` s detailním finančním rozpisy (administrace, podíly týmu) a hodnocením stylu (Ghost až Butcher).
+
+STAV PROJEKTU:
+*   Projekt je ve fázi pozdní Alfy. Všechny klíčové systémy simulace a RPG mechanik jsou funkční.
+*   Hra má robustní sadu testů zajišťující stabilitu pokročilých mechanik.
+*   Logika Heatu, Reputace a Ekonomiky je plně propojena s gameplayem.
+
+DALŠÍ KROKY:
+*   Implementace "Story" událostí na mapě (např. telefonáty od Honzy).
+*   Rozšíření Adventure Mode: Dynamické NPC rutiny v lokacích (střídání postav podle času).
+*   Audio: Integrace konkrétních SFX assetů pro stealth (kroky na různých površích).
+

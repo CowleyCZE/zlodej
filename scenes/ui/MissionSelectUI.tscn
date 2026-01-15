@@ -1,0 +1,123 @@
+[gd_scene load_steps=2 format=3 uid="uid://dypoag8wu0olc"]
+
+[ext_resource type="Script" uid="uid://c10ull7r7lo10" path="res://scripts/ui/MissionSelectUI.gd" id="1_u0l8q"]
+
+[node name="MissionSelectUI" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_u0l8q")
+
+[node name="MapPlaceholder" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.145098, 0.145098, 0.164706, 1)
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -150.0
+offset_top = 50.0
+offset_right = 150.0
+offset_bottom = 100.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 32
+text = "MAPA PRAHY"
+horizontal_alignment = 1
+
+[node name="PinsContainer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Pin_Hotel" type="Button" parent="PinsContainer"]
+layout_mode = 0
+offset_left = 400.0
+offset_top = 300.0
+offset_right = 550.0
+offset_bottom = 350.0
+text = "Hotel Augustine"
+
+[node name="Pin_Bank" type="Button" parent="PinsContainer"]
+layout_mode = 0
+offset_left = 700.0
+offset_top = 400.0
+offset_right = 850.0
+offset_bottom = 450.0
+text = "Sklad Hostivař"
+
+[node name="MissionInfoPanel" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -150.0
+offset_right = 200.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="MissionInfoPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="MissionTitle" type="Label" parent="MissionInfoPanel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Název mise"
+horizontal_alignment = 1
+
+[node name="RewardLabel" type="Label" parent="MissionInfoPanel/VBox"]
+layout_mode = 2
+text = "Odměna: 0 Kč"
+horizontal_alignment = 1
+
+[node name="Btn_StartMission" type="Button" parent="MissionInfoPanel/VBox"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+text = "Zahájit plánování"
+
+[node name="Btn_ClosePanel" type="Button" parent="MissionInfoPanel/VBox"]
+layout_mode = 2
+text = "Zavřít"
+
+[node name="Btn_BackToHub" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -80.0
+offset_right = 100.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Zpět do skladu"

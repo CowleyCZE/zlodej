@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="CharacterData" load_steps=3 format=3 uid="uid://cyk_milan_789"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/milan_portrait.png" id="1_milan_p"]
+[ext_resource type="Script" path="res://scripts/resources/CharacterData.gd" id="2_script"]
+
+[resource]
+script = ExtResource("2_script")
+name = "Milan \"Grizzly\" Kovářík"
+age = 55
+portrait = ExtResource("1_milan_p")
+description = "Bývalý vyhazovač se silou medvěda. Půjde do toho pro prachy, ale nečekej, že tě bude krýt."
+spawn_location = "Staveniste"
+availability_slot = 0
+greeting_text = "Co chceš? Jestli práci, tak mluv. Já sem ten, co vykopne dveře, když se zaseknou. Ale varuju tě, nezkoušej mě ojebat o podíl, jasný?"
+role = "Silák"
+hiring_cost = 6000
+loot_share_percent = 15
+daily_salary = 0
+driving = 30
+lock_picking = 20
+electronics = 0
+stealth = 10
+strength = 100
+greed = 90
+loyalty = 40
+nerves = 70
+dexterity = 40
+is_hirable = true
+is_hired = false
+is_injured = false
+injury_level = 0.0
+fatigue = 0.0
+stress = 0.0
+satisfaction = 0.0
+voice_pitch = 0.8
+inventory = []

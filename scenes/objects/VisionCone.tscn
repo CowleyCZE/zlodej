@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/objects/VisionCone.gd" id="1_script"]
+
+[node name="VisionCone" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+
+[node name="Line2D" type="Line2D" parent="."]
+closed = true
+width = 2.0
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_body_entered"]

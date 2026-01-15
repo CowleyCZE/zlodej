@@ -1,0 +1,75 @@
+[gd_scene load_steps=2 format=3 uid="uid://c2jwhcl5a4bai"]
+
+[ext_resource type="Script" path="res://scripts/ui/ControlPad.gd" id="1_script"]
+
+[node name="ControlPad" type="Control"]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -220.0
+offset_top = -220.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("1_script")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Undo" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+text = "⟲"
+
+[node name="Up" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+text = "▲"
+
+[node name="CenterCam" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+text = "◎"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Left" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+text = "◄"
+
+[node name="Down" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+text = "▼"
+
+[node name="Right" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+text = "►"
+
+[connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/Undo" to="." method="_on_undo_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/CenterCam" to="." method="_on_center_camera_pressed"]

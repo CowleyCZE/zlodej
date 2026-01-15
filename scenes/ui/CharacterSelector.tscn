@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/CharacterSelector.gd" id="1_script"]
+
+[node name="CharacterSelector" type="HBoxContainer"]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 220.0
+offset_bottom = 70.0
+theme_override_constants/separation = 10
+script = ExtResource("1_script")
+
+[node name="Thief" type="Button" parent="."]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "ZLODĚJ"
+
+[node name="Hacker" type="Button" parent="."]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+modulate = Color(0.5, 0.5, 0.5, 1)
+text = "HACKER"
+
+[connection signal="pressed" from="Thief" to="." method="_on_thief_pressed"]
+[connection signal="pressed" from="Hacker" to="." method="_on_hacker_pressed"]

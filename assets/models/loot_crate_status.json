@@ -1,0 +1,16 @@
+{
+  "id": "loot_crate_status",
+  "status": "failed",
+  "progress": 0,
+  "message": "Generation failed: FAL_AI_API_KEY environment variable is required",
+  "startTime": "2025-12-26T19:48:24.322Z",
+  "logs": [
+    "[2025-12-26T19:48:24.325Z] Starting 3D generation with model: hunyuan3d, variant: undefined",
+    "[2025-12-26T19:48:24.326Z] No input images provided, generating reference images automatically...",
+    "[2025-12-26T19:48:24.329Z] Generated 0 reference images",
+    "[2025-12-26T19:48:24.330Z] Using variant: single with 0 input images",
+    "[2025-12-26T19:48:24.332Z] ERROR: FAL_AI_API_KEY environment variable is required"
+  ],
+  "endTime": "2025-12-26T19:48:24.331Z",
+  "error": "FAL_AI_API_KEY environment variable is required"
+}

@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="CharacterData" load_steps=3 format=3 uid="uid://honza_fixer_001"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/honza_portrait.png" id="1_honza_p"]
+[ext_resource type="Script" path="res://scripts/resources/CharacterData.gd" id="2_script"]
+
+[resource]
+script = ExtResource("2_script")
+name = "Honza"
+age = 45
+portrait = ExtResource("1_honza_p")
+description = "Tvůj starý známý a spojka na mělnické podsvětí. Vždycky ví, kde se co šustne."
+greeting_text = "Čau [NAME]. Rád tě vidím. Ta práce v MelTechu je jednoduchá - starej sklad, data na terminálu, jeden hlídač co víc spí než hlídá. Stačí to naplánovat, vlézt tam a zmizet. Jsi připraven?"
+spawn_location = "CernyOrel"
+availability_slot = 2
+role = "Fixer"
+hiring_cost = 0.0
+loot_share_percent = 10
+daily_salary = 0.0
+expected_payment = 0.0
+driving = 0
+lock_picking = 0
+electronics = 0
+stealth = 0
+strength = 0
+greed = 50.0
+loyalty = 100.0
+nerves = 100.0
+dexterity = 50.0
+is_hirable = false
+is_hired = false
+is_injured = false
+injury_level = 0.0
+fatigue = 0.0
+stress = 0.0
+satisfaction = 100.0
+voice_pitch = 0.85
+inventory = []

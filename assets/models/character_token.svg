@@ -1,0 +1,21 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background: Black for additive blending -->
+  <rect width="256" height="256" fill="#000000"/>
+  
+  <!-- Outer Ring: Cyan Neon -->
+  <circle cx="128" cy="128" r="110" fill="none" stroke="#00FFFF" stroke-width="8"/>
+  <circle cx="128" cy="128" r="120" fill="none" stroke="#00FFFF" stroke-width="2" opacity="0.5"/>
+  
+  <!-- Character Silhouette: Hooded Figure (Top Down) -->
+  <g transform="translate(128, 128)">
+    <!-- Shoulders -->
+    <path d="M-60,40 Q-70,10 -40,-30 L-30,-40 L30,-40 L40,-30 Q70,10 60,40" fill="none" stroke="#00FFFF" stroke-width="6" stroke-linejoin="round"/>
+    
+    <!-- Hood/Head -->
+    <circle cx="0" cy="-10" r="35" fill="none" stroke="#00FFFF" stroke-width="6"/>
+    <path d="M-25,-15 Q0,15 25,-15" fill="none" stroke="#00FFFF" stroke-width="4"/> <!-- Hood rim -->
+  </g>
+  
+  <!-- Direction Indicator (Triangle) -->
+  <path d="M128,20 L138,40 L118,40 Z" fill="#00FFFF"/>
+</svg>

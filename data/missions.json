@@ -1,0 +1,22 @@
+{
+  "missions": [
+	{
+	  "id": "mission_01",
+	  "region_id": "mala_strana",
+	  "name": "Loupež trafiky",
+	  "description": "Rychlá akce v centru Prahy.",
+	  "difficulty": 1,
+	  "min_reputation": 0,
+	  "reward": 5000
+	},
+	{
+	  "id": "mission_02",
+	  "region_id": "vinohrady",
+	  "name": "Vloupání do penzionu",
+	  "description": "Nenápadná akce v rezidenční čtvrti.",
+	  "difficulty": 2,
+	  "min_reputation": 10,
+	  "reward": 15000
+	}
+  ]
+}

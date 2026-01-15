@@ -1,0 +1,196 @@
+[gd_scene load_steps=2 format=3 uid="uid://bc2lupd12rf8g"]
+
+[ext_resource type="Script" path="res://scripts/ui/ShopUI.gd" id="1_2ga4l"]
+
+[node name="ShopUI" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_2ga4l")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0509804, 0.105882, 0.164706, 0.941176)
+
+[node name="TopPanel" type="Panel" parent="."]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="Margin" type="MarginContainer" parent="TopPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+
+[node name="HBox" type="HBoxContainer" parent="TopPanel/Margin"]
+layout_mode = 2
+
+[node name="ShopTitle" type="Label" parent="TopPanel/Margin/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "ČERNÝ TRH MĚLNÍK"
+vertical_alignment = 1
+
+[node name="Spacer" type="Control" parent="TopPanel/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerMoney" type="Label" parent="TopPanel/Margin/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.960784, 0.772549, 0.0941176, 1)
+theme_override_font_sizes/font_size = 28
+text = "10000 CZK"
+vertical_alignment = 1
+
+[node name="MainLayout" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 100.0
+offset_bottom = -100.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="LeftMargin" type="Control" parent="MainLayout"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="ListPanel" type="Panel" parent="MainLayout"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="MainLayout/ListPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="MainLayout/ListPanel/VBox"]
+layout_mode = 2
+text = "DOSTUPNÉ VYBAVENÍ"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MainLayout/ListPanel/VBox"]
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="MainLayout/ListPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ItemRows" type="VBoxContainer" parent="MainLayout/ListPanel/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="DetailPanel" type="Panel" parent="MainLayout"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Margin" type="MarginContainer" parent="MainLayout/DetailPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 40
+
+[node name="VBox" type="VBoxContainer" parent="MainLayout/DetailPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="ImageFrame" type="ColorRect" parent="MainLayout/DetailPanel/Margin/VBox"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 4
+color = Color(0, 0.4, 1, 0.156863)
+
+[node name="Image" type="TextureRect" parent="MainLayout/DetailPanel/Margin/VBox/ImageFrame"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="MainLayout/DetailPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 36
+text = "Vyber předmět"
+horizontal_alignment = 1
+
+[node name="Description" type="Label" parent="MainLayout/DetailPanel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 20
+text = "Zde se zobrazí technická specifikace vybraného vybavení."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="HBox" type="HBoxContainer" parent="MainLayout/DetailPanel/Margin/VBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="Price" type="Label" parent="MainLayout/DetailPanel/Margin/VBox/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.960784, 0.772549, 0.0941176, 1)
+theme_override_font_sizes/font_size = 32
+text = "0 CZK"
+
+[node name="Btn_Buy" type="Button" parent="MainLayout/DetailPanel/Margin/VBox"]
+custom_minimum_size = Vector2(300, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 24
+text = "POTVRDIT NÁKUP"
+
+[node name="RightMargin" type="Control" parent="MainLayout"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="Btn_Exit" type="Button" parent="."]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -80.0
+offset_right = 100.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "ZPĚT NA MAPU"

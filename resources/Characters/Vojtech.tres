@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="CharacterData" load_steps=2 format=3 uid="uid://cyk_vojtech_222"]
+[ext_resource type="Script" path="res://scripts/resources/CharacterData.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+name = "Vojtěch \"Vejce\" Malý"
+age = 26
+description = "Precizní umělec s paklíčem. Jeho práce je čistá a tichá, jako chirurgický zákrok."
+spawn_location = "CafeVltava"
+role = "Specialista"
+hiring_cost = 9000
+daily_salary = 0
+driving = 20
+lock_picking = 95
+electronics = 60
+stealth = 80
+strength = 20
+greed = 50
+loyalty = 70
+nerves = 90
+dexterity = 90
+is_hired = false
+is_injured = false
+injury_level = 0.0
+fatigue = 0.0

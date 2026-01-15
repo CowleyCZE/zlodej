@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="CharacterData" load_steps=2 format=3 uid="uid://cyk_anna_111"]
+[ext_resource type="Script" path="res://scripts/resources/CharacterData.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+name = "Anna Řehová"
+age = 35
+description = "Tichá a spolehlivá profesionálka z mělnického přístavu. Nikdo o ní neví, dokud není pozdě."
+spawn_location = "PodBrehem"
+role = "Infiltrátor"
+hiring_cost = 7000
+daily_salary = 0
+driving = 40
+lock_picking = 50
+electronics = 30
+stealth = 90
+strength = 40
+greed = 30
+loyalty = 90
+nerves = 80
+dexterity = 70
+is_hired = false
+is_injured = false
+injury_level = 0.0
+fatigue = 0.0

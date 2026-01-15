@@ -1,0 +1,6 @@
+[gd_resource type="Environment" format=3 uid="uid://dxxr4m5h3dfsp"]
+
+[resource]
+background_mode = 2
+ambient_light_color = Color(0.039215688, 0.11764706, 0.20784314, 1)
+glow_enabled = true

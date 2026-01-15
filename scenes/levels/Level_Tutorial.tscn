@@ -1,0 +1,72 @@
+[gd_scene load_steps=10 format=3 uid="uid://level_tutorial_v3"]
+
+[ext_resource type="PackedScene" uid="uid://door_object" path="res://scenes/objects/Door.tscn" id="1_door"]
+[ext_resource type="PackedScene" uid="uid://loot_object" path="res://scenes/objects/Loot.tscn" id="2_loot"]
+[ext_resource type="PackedScene" uid="uid://alarm_button_v1" path="res://scenes/objects/AlarmButton.tscn" id="3_alarm"]
+[ext_resource type="PackedScene" uid="uid://guard_v2" path="res://scenes/objects/Guard.tscn" id="4_guard"]
+[ext_resource type="PackedScene" uid="uid://player_agent_v3" path="res://scenes/agents/PlayerAgent.tscn" id="5_player"]
+[ext_resource type="PackedScene" uid="uid://c2jwhcl5a4bai" path="res://scenes/ui/ControlPad.tscn" id="6_pad"]
+[ext_resource type="PackedScene" path="res://scenes/objects/HackingTerminal.tscn" id="7_terminal"]
+[ext_resource type="PackedScene" path="res://scenes/objects/ExtractionZone.tscn" id="8_extraction"]
+
+[sub_resource type="GDScript" id="GDScript_1"]
+script/source = "extends Node2D
+func _ready():
+	# Reset state for tutorial
+	GameManager.main_loot_collected = false
+"
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_2"]
+vertices = PackedVector2Array(0, 0, 1200, 0, 1200, 800, 0, 800)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(0, 0, 1200, 0, 1200, 800, 0, 800)])
+source_geometry_group_name = &"navigation_polygon_source_group"
+
+[node name="Level_Tutorial" type="Node2D"]
+script = SubResource("GDScript_1")
+
+[node name="Floor" type="ColorRect" parent="."]
+offset_right = 1200.0
+offset_bottom = 800.0
+color = Color(0.2, 0.2, 0.2, 1)
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavigationPolygon_2")
+
+[node name="Walls" type="StaticBody2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(0, 0, 1200, 0, 1200, 800, 0, 800, 0, 20, 1180, 20, 1180, 780, 20, 780, 20, 0)
+
+[node name="Props" type="Node2D" parent="."]
+
+[node name="ExtractionZone" parent="Props" instance=ExtResource("8_extraction")]
+position = Vector2(100, 400)
+
+[node name="Door" parent="Props" instance=ExtResource("1_door")]
+position = Vector2(600, 400)
+
+[node name="HackingTerminal" parent="Props" instance=ExtResource("7_terminal")]
+position = Vector2(900, 400)
+is_main_objective = true
+
+[node name="Loot" parent="Props" instance=ExtResource("2_loot")]
+position = Vector2(900, 600)
+is_main_objective = false
+value = 1500
+
+[node name="AlarmButton" parent="Props" instance=ExtResource("3_alarm")]
+position = Vector2(650, 350)
+
+[node name="Guards" type="Node2D" parent="."]
+
+[node name="Guard1" parent="Guards" instance=ExtResource("4_guard")]
+position = Vector2(800, 200)
+patrol_points = Array[Vector2]([Vector2(800, 200), Vector2(800, 600)])
+
+[node name="PlayerAgent" parent="." instance=ExtResource("5_player")]
+position = Vector2(100, 400)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ControlPad" parent="CanvasLayer" instance=ExtResource("6_pad")]

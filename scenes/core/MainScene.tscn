@@ -1,0 +1,134 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/core/MainScene.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/objects/InteractiveObject.tscn" id="2_obj"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ContextMenu.tscn" id="3_menu"]
+[ext_resource type="Texture2D" path="res://assets/characters/player_texture_placeholder.tres" id="4_icon"]
+[ext_resource type="PackedScene" path="res://scenes/ui/TimelinePanel.tscn" id="5_timeline"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ControlPad.tscn" id="6_pad"]
+[ext_resource type="PackedScene" path="res://scenes/ui/CharacterSelector.tscn" id="7_select"]
+
+[ext_resource type="PackedScene" path="res://scenes/objects/Loot.tscn" id="6_loot"]
+[ext_resource type="PackedScene" path="res://scenes/objects/ExtractionZone.tscn" id="7_exit"]
+[ext_resource type="PackedScene" path="res://scenes/objects/Guard.tscn" id="8_guard"]
+[ext_resource type="PackedScene" path="res://scenes/objects/Door.tscn" id="9_door"]
+[ext_resource type="Shader" path="res://assets/materials/blueprint_overlay.gdshader" id="10_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_blueprint"]
+shader = ExtResource("10_shader")
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_add"]
+blend_mode = 1
+
+[sub_resource type="Environment" id="Environment_1"]
+background_mode = 3
+glow_enabled = true
+glow_intensity = 1.5
+glow_blend_mode = 0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
+size = Vector2(64, 64)
+
+[node name="MainScene" type="Node"]
+script = ExtResource("1_script")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_1")
+
+[node name="GameWorld" type="Node2D" parent="."]
+
+[node name="Background" type="ColorRect" parent="GameWorld"]
+material = SubResource("ShaderMaterial_blueprint")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1152.0
+offset_bottom = 648.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.0509804, 0.105882, 0.164706, 1)
+
+[node name="MapGrid" type="Node2D" parent="GameWorld"]
+
+[node name="PathVisualizer" type="Line2D" parent="GameWorld"]
+width = 4.0
+default_color = Color(0, 1, 0, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="PlayerToken" type="CharacterBody2D" parent="GameWorld" groups=["player"]]
+position = Vector2(100, 100)
+collision_layer = 2
+collision_mask = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="GameWorld/PlayerToken"]
+modulate = Color(1, 0.54902, 0.258824, 1)
+material = SubResource("CanvasItemMaterial_add")
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("4_icon")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameWorld/PlayerToken"]
+shape = SubResource("RectangleShape2D_player")
+
+[node name="HackerToken" type="CharacterBody2D" parent="GameWorld" groups=["player"]]
+position = Vector2(100, 180)
+collision_layer = 2
+collision_mask = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="GameWorld/HackerToken"]
+modulate = Color(0.270588, 0.482353, 0.615686, 1)
+material = SubResource("CanvasItemMaterial_add")
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("4_icon")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameWorld/HackerToken"]
+shape = SubResource("RectangleShape2D_player")
+
+[node name="Dvere" parent="GameWorld" instance=ExtResource("9_door")]
+position = Vector2(200, 200)
+difficulty = 0.5
+
+[node name="Trezor" parent="GameWorld" instance=ExtResource("2_obj")]
+position = Vector2(900, 500)
+object_name = "Trezor"
+available_actions = Array[String](["Vrtat", "Čekat 5s"])
+
+[node name="MainLoot" parent="GameWorld" instance=ExtResource("6_loot")]
+position = Vector2(1000, 150)
+loot_value = 50000
+
+[node name="ExtractionZone" parent="GameWorld" instance=ExtResource("7_exit")]
+position = Vector2(100, 500)
+
+[node name="Guard1" parent="GameWorld" instance=ExtResource("8_guard")]
+position = Vector2(300, 300)
+patrol_points = Array[Vector2]([Vector2(300, 300), Vector2(300, 500), Vector2(500, 500), Vector2(500, 300)])
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HUD" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TimelinePanel" parent="CanvasLayer/HUD" instance=ExtResource("5_timeline")]
+layout_mode = 1
+offset_right = -240.0
+
+[node name="ControlPad" parent="CanvasLayer/HUD" instance=ExtResource("6_pad")]
+layout_mode = 1
+
+[node name="CharacterSelector" parent="CanvasLayer/HUD" instance=ExtResource("7_select")]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 230.0
+offset_bottom = 70.0
+
+[node name="ContextMenu" parent="CanvasLayer" instance=ExtResource("3_menu")]

@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://bcc5oqk0ywq3c"]
+
+[ext_resource type="Script" uid="uid://tusjek7dxt3q" path="res://scripts/core/Game.gd" id="1_wbfu4"]
+
+[node name="Game" type="Node"]
+script = ExtResource("1_wbfu4")
+
+[node name="WorldHolder" type="Node2D" parent="."]
+
+[node name="PlanningHolder" type="Node2D" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="UIHolder" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

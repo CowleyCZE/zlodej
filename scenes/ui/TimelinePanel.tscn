@@ -1,0 +1,58 @@
+[gd_scene load_steps=2 format=3 uid="uid://tqdeypsn1c2i"]
+
+[ext_resource type="Script" uid="uid://dwdochrw5urj7" path="res://scripts/ui/TimelinePanel.gd" id="1_script"]
+
+[node name="TimelinePanel" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 120)
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("1_script")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Header" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Header"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.8, 0.8, 1)
+text = "TIMELINE EDITOR"
+
+[node name="Control" type="Control" parent="VBoxContainer/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlaybackControls" type="HBoxContainer" parent="VBoxContainer/Header"]
+layout_mode = 2
+alignment = 1
+
+[node name="BtnRestart" type="Button" parent="VBoxContainer/Header/PlaybackControls"]
+layout_mode = 2
+text = " ⏪ "
+
+[node name="BtnStop" type="Button" parent="VBoxContainer/Header/PlaybackControls"]
+layout_mode = 2
+text = " ⏹ "
+
+[node name="BtnPlay" type="Button" parent="VBoxContainer/Header/PlaybackControls"]
+layout_mode = 2
+text = " ▶ "
+
+[node name="TimeDisplay" type="Label" parent="VBoxContainer/Header"]
+layout_mode = 2
+text = "0.0s / 0.0s"
+
+[node name="TracksContainer" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TimeSlider" type="HSlider" parent="VBoxContainer"]
+layout_mode = 2
+max_value = 1.0
+step = 0.001

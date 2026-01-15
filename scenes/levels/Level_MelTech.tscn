@@ -1,0 +1,103 @@
+[gd_scene load_steps=10 format=3 uid="uid://level_meltech_v1"]
+
+[ext_resource type="PackedScene" uid="uid://door_object" path="res://scenes/objects/Door.tscn" id="1_door"]
+[ext_resource type="PackedScene" uid="uid://loot_object" path="res://scenes/objects/Loot.tscn" id="2_loot"]
+[ext_resource type="PackedScene" uid="uid://guard_v2" path="res://scenes/objects/Guard.tscn" id="3_guard"]
+[ext_resource type="PackedScene" uid="uid://player_agent_v3" path="res://scenes/agents/PlayerAgent.tscn" id="4_player"]
+[ext_resource type="PackedScene" uid="uid://c2jwhcl5a4bai" path="res://scenes/ui/ControlPad.tscn" id="5_pad"]
+[ext_resource type="PackedScene" uid="uid://hacking_terminal_v2" path="res://scenes/objects/HackingTerminal.tscn" id="7_terminal"]
+[ext_resource type="PackedScene" path="res://scenes/objects/ExtractionZone.tscn" id="8_extract"]
+[ext_resource type="PackedScene" uid="uid://security_camera_v1" path="res://scenes/objects/SecurityCamera.tscn" id="9_camera"]
+
+[sub_resource type="GDScript" id="GDScript_1"]
+script/source = "extends Node2D
+func _ready():
+	GameManager.main_loot_collected = false
+"
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_1"]
+vertices = PackedVector2Array(50, 50, 550, 50, 550, 950, 50, 950, 650, 450, 950, 450, 950, 550, 650, 550, 1050, 50, 1550, 50, 1550, 450, 1050, 450, 1050, 550, 1550, 550, 1550, 950, 1050, 950)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(4, 5, 6, 7), PackedInt32Array(8, 9, 10, 11), PackedInt32Array(12, 13, 14, 15)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(50, 50, 550, 50, 550, 950, 50, 950), PackedVector2Array(650, 450, 950, 450, 950, 550, 650, 550), PackedVector2Array(1050, 50, 1550, 50, 1550, 450, 1050, 450), PackedVector2Array(1050, 550, 1550, 550, 1550, 950, 1050, 950)])
+
+[node name="Level_MelTech" type="Node2D"]
+script = SubResource("GDScript_1")
+
+[node name="Floor" type="ColorRect" parent="."]
+offset_right = 1600.0
+offset_bottom = 1000.0
+color = Color(0.12, 0.12, 0.15, 1)
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavigationPolygon_1")
+
+[node name="Walls" type="StaticBody2D" parent="."]
+
+[node name="OuterWalls" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(0, 0, 1600, 0, 1600, 1000, 0, 1000, 0, 20, 1580, 20, 1580, 980, 20, 980, 20, 0)
+
+[node name="InternalWall1" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(600, 0, 620, 0, 620, 400, 600, 400)
+
+[node name="InternalWall2" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(600, 600, 620, 600, 620, 1000, 600, 1000)
+
+[node name="InternalWall3" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1000, 0, 1020, 0, 1020, 1000, 1000, 1000)
+
+[node name="Props" type="Node2D" parent="."]
+
+[node name="ExtractionZone" parent="Props" instance=ExtResource("8_extract")]
+position = Vector2(100, 500)
+
+[node name="Door_Main" parent="Props" instance=ExtResource("1_door")]
+position = Vector2(610, 500)
+rotation = 1.5708
+object_name = "Main Entrance"
+
+[node name="Door_ServerRoom" parent="Props" instance=ExtResource("1_door")]
+position = Vector2(1010, 250)
+rotation = 1.5708
+object_name = "Server Room Door"
+
+[node name="Terminal_Security" parent="Props" instance=ExtResource("7_terminal")]
+position = Vector2(300, 200)
+object_name = "Security Terminal"
+shuts_down_security = true
+money_reward = 500
+is_main_objective = false
+
+[node name="Loot_HardDrive" parent="Props" instance=ExtResource("2_loot")]
+position = Vector2(1400, 200)
+object_name = "Encryption Disk"
+is_main_objective = true
+value = 5000
+
+[node name="Camera_Hallway" parent="Props" instance=ExtResource("9_camera")]
+position = Vector2(980, 50)
+rotation = 1.5708
+scan_angle = 60.0
+scan_speed = 0.5
+
+[node name="Camera_Server" parent="Props" instance=ExtResource("9_camera")]
+position = Vector2(1550, 50)
+rotation = 2.35619
+scan_angle = 90.0
+scan_speed = 0.8
+
+[node name="Guards" type="Node2D" parent="."]
+
+[node name="Guard_Lobby" parent="Guards" instance=ExtResource("3_guard")]
+position = Vector2(300, 800)
+patrol_points = Array[Vector2]([Vector2(300, 800), Vector2(300, 400), Vector2(500, 400), Vector2(500, 800)])
+
+[node name="Guard_Server" parent="Guards" instance=ExtResource("3_guard")]
+position = Vector2(1300, 700)
+patrol_points = Array[Vector2]([Vector2(1100, 700), Vector2(1500, 700), Vector2(1500, 900), Vector2(1100, 900)])
+
+[node name="PlayerAgent" parent="." instance=ExtResource("4_player")]
+position = Vector2(100, 500)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ControlPad" parent="CanvasLayer" instance=ExtResource("5_pad")]

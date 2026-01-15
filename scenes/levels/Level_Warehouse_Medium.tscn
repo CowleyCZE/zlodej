@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://bs384haqkwx42"]
+
+[node name="Level_Warehouse_Medium" type="Node3D"]
+
+[node name="Geometry" type="Node3D" parent="."]
+
+[node name="Office_Room" type="Node3D" parent="."]
+
+[node name="GlassWindow" type="StaticBody3D" parent="Office_Room"]
+collision_layer = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Office_Room/GlassWindow"]
+
+[node name="Door_Locked" type="Area3D" parent="Office_Room"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Office_Room/Door_Locked"]
+
+[node name="Security" type="Node3D" parent="."]
+
+[node name="Camera_Hallway" type="Node3D" parent="Security"]
+
+[node name="AlarmTrigger" type="Area3D" parent="Security"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Security/AlarmTrigger"]
+
+[node name="Loot" type="Node3D" parent="."]
+
+[node name="ManagerSafe" type="Node3D" parent="Loot"]
+
+[node name="Keycard" type="Node3D" parent="Loot"]
+
+[node name="NPCs" type="Node3D" parent="."]
+
+[node name="Guard_Patrol_1" type="CharacterBody3D" parent="NPCs"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NPCs/Guard_Patrol_1"]
+
+[node name="Guard_Patrol_2" type="CharacterBody3D" parent="NPCs"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NPCs/Guard_Patrol_2"]
+
+[node name="Worker_Sitting" type="CharacterBody3D" parent="NPCs"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NPCs/Worker_Sitting"]
+
+[node name="Labels" type="Node3D" parent="."]
+
+[node name="ManagerSign" type="Label3D" parent="Labels"]
+text = "MANAŽER SKLADU - Ing. Novák"
+
+[node name="CameraSign" type="Label3D" parent="Labels"]
+text = "POZOR! PROSTOR MONITOROVÁN KAMERAMI"
+
+[node name="KeycardHint" type="Label3D" parent="Labels"]
+text = "Vzít přístupovou kartu"

@@ -1,0 +1,93 @@
+[gd_scene load_steps=2 format=3 uid="uid://b33t74gl6yfuv"]
+
+[ext_resource type="Script" path="res://scripts/ui/DialogueSystem.gd" id="1_drk8f"]
+
+[node name="DialogueSystem" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_drk8f")
+
+[node name="BackgroundDim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0509804, 0.105882, 0.164706, 0.392157)
+
+[node name="DialogPanel" type="Panel" parent="."]
+custom_minimum_size = Vector2(0, 250)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -250.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Margin" type="MarginContainer" parent="DialogPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 20
+
+[node name="Content" type="HBoxContainer" parent="DialogPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="PortraitFrame" type="ColorRect" parent="DialogPanel/Margin/Content"]
+custom_minimum_size = Vector2(210, 210)
+layout_mode = 2
+color = Color(0, 0.4, 1, 0.235294)
+
+[node name="Portrait" type="TextureRect" parent="DialogPanel/Margin/Content/PortraitFrame"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextColumn" type="VBoxContainer" parent="DialogPanel/Margin/Content"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="NameTag" type="Label" parent="DialogPanel/Margin/Content/TextColumn"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.960784, 0.772549, 0.0941176, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 24
+text = "JMÉNO"
+
+[node name="DialogueText" type="RichTextLabel" parent="DialogPanel/Margin/Content/TextColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "Text dialogu se zobrazí zde..."
+
+[node name="ChoicesColumn" type="VBoxContainer" parent="DialogPanel/Margin/Content"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="AudioPlayer" type="AudioStreamPlayer" parent="."]

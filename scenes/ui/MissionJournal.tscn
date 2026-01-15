@@ -1,0 +1,123 @@
+[gd_scene load_steps=2 format=3 uid="uid://mission_journal_v1"]
+
+[ext_resource type="Script" path="res://scripts/ui/MissionJournal.gd" id="1_journal_script"]
+
+[node name="MissionJournal" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_journal_script")
+
+[node name="BackgroundDim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0509804, 0.105882, 0.164706, 0.823529)
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(800, 600)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -350.0
+offset_right = 500.0
+offset_bottom = 350.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Btn_Close" type="Button" parent="Panel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+text = "X"
+
+[node name="Layout" type="HBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="LeftColumn" type="VBoxContainer" parent="Panel/Layout"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Title" type="Label" parent="Panel/Layout/LeftColumn"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 28
+text = "DENÍK MISÍ"
+
+[node name="HSeparator" type="HSeparator" parent="Panel/Layout/LeftColumn"]
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="Panel/Layout/LeftColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MissionList" type="VBoxContainer" parent="Panel/Layout/LeftColumn/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="RightColumn" type="VBoxContainer" parent="Panel/Layout"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+
+[node name="MissionTitle" type="Label" parent="Panel/Layout/RightColumn"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "Vyber misi ze seznamu"
+horizontal_alignment = 1
+
+[node name="ScrollBrief" type="ScrollContainer" parent="Panel/Layout/RightColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BriefingText" type="Label" parent="Panel/Layout/RightColumn/ScrollBrief"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "Zde se zobrazí detaily briefing a cíle operace."
+autowrap_mode = 3
+
+[node name="IntelSection" type="VBoxContainer" parent="Panel/Layout/RightColumn"]
+layout_mode = 2
+
+[node name="IntelTitle" type="Label" parent="Panel/Layout/RightColumn/IntelSection"]
+layout_mode = 2
+text = "SHROMÁŽDĚNÉ INFORMACE (INTEL):"
+
+[node name="Grid" type="GridContainer" parent="Panel/Layout/RightColumn/IntelSection"]
+layout_mode = 2
+columns = 2
+
+[node name="Btn_StartPlanning" type="Button" parent="Panel/Layout/RightColumn"]
+visible = false
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "PŘEJÍT K PLÁNOVÁNÍ"

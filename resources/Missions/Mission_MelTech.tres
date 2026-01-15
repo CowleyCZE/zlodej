@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="MissionData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/MissionData.gd" id="1_mission_data"]
+
+[resource]
+script = ExtResource("1_mission_data")
+mission_id = "mission_meltech_01"
+name = "MelTech - Získání disku"
+description = "Společnost MelTech vyvinula nový šifrovací disk. Tvým úkolem je vniknout do jejich kanceláří, najít serverovnu a disk odcizit. Pozor na kamery."
+briefing = "Cíl se nachází v zabezpečené serverovně. Budova má dva vchody - hlavní (hlídaný) a zadní (pro zaměstnance). Doporučuji získat plány budovy."
+region_id = "melnik"
+target_location = "res://scenes/levels/Level_MelTech.tscn"
+difficulty = 2
+min_reputation = 0
+objective_type = "steal_item"
+objective_item = "Prototyp Disku"
+base_reward = 25000
+reputation_gain = 30
+guard_count = 3
+camera_count = 2
+has_alarm = true
+address = "Průmyslová 45, Mělník"
+is_address_known = false
+known_facts = {}
+discovered_entry_points = []
+intel_flags = {
+"architecture": false,
+"patrols": false,
+"routes": false,
+"security": false,
+"treasure": false
+}
+required_tools = Array[String](["lockpick_set"])
+max_team_size = 3
+time_limit_seconds = 600.0

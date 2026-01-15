@@ -1,0 +1,25 @@
+# Godot-specific ignores
+.godot/
+*.import
+export_preset.cfg
+*.translation
+
+# Mono-specific ignores
+.mono/
+*.sln
+*.csproj
+*.csproj.user
+
+# Tool-specific ignores
+.vscode/
+.idea/
+
+# OS-specific ignores
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Project specific
+/android/
+/build/
+*.log

@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="CharacterData" load_steps=3 format=3 uid="uid://cyk_petra_456"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/petra_portrait.png" id="1_petra_p"]
+[ext_resource type="Script" path="res://scripts/resources/CharacterData.gd" id="2_script"]
+
+[resource]
+script = ExtResource("2_script")
+name = "Petra \"Tříska\" Svobodová"
+age = 28
+portrait = ExtResource("1_petra_p")
+description = "IT expertka, která vidí svět v kódu. Spolehlivá, ale pod tlakem trochu nervózní."
+spawn_location = "CafeVltava"
+availability_slot = 0
+greeting_text = "Ahoj. Sleduju tvoji aktivitu už nějakou dobu. Máš zajímavý rukopis. Jestli se chceš dostat k datům MelTechu, budu tvoje oči v síti. Ale pamatuj, nejsem fanoušek násilí."
+role = "Hacker"
+hiring_cost = 8000
+loot_share_percent = 25
+daily_salary = 0
+driving = 20
+lock_picking = 70
+electronics = 95
+stealth = 60
+strength = 10
+greed = 40
+loyalty = 80
+nerves = 45
+dexterity = 50
+is_hirable = true
+is_hired = false
+is_injured = false
+injury_level = 0.0
+fatigue = 0.0
+stress = 0.0
+satisfaction = 0.0
+voice_pitch = 1.1
+inventory = []

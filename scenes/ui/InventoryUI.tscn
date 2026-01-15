@@ -1,0 +1,130 @@
+[gd_scene load_steps=2 format=3 uid="uid://df2mtm4kn4tcb"]
+
+[ext_resource type="Script" path="res://scripts/ui/InventoryUI.gd" id="1_dsn3v"]
+
+[node name="InventoryUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dsn3v")
+
+[node name="BackgroundDim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0509804, 0.105882, 0.164706, 0.705882)
+
+[node name="MainPanel" type="Panel" parent="."]
+custom_minimum_size = Vector2(800, 500)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -450.0
+offset_top = -300.0
+offset_right = 450.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Layout" type="HBoxContainer" parent="MainPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="LeftColumn" type="VBoxContainer" parent="MainPanel/Layout"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 15
+
+[node name="Title" type="Label" parent="MainPanel/Layout/LeftColumn"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 28
+text = "VYBAVENÍ TÝMU"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MainPanel/Layout/LeftColumn"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainPanel/Layout/LeftColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ItemGrid" type="GridContainer" parent="MainPanel/Layout/LeftColumn/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 4
+
+[node name="WeightBar" type="ProgressBar" parent="MainPanel/Layout/LeftColumn"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+tooltip_text = "Celková váha vybavení"
+
+[node name="RightColumn_Details" type="VBoxContainer" parent="MainPanel/Layout"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="ItemPreview" type="ColorRect" parent="MainPanel/Layout/RightColumn_Details"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+color = Color(0, 0.4, 1, 0.117647)
+
+[node name="ItemName" type="Label" parent="MainPanel/Layout/RightColumn_Details"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "Vyber předmět"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ItemDescription" type="Label" parent="MainPanel/Layout/RightColumn_Details"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Zde se zobrazí detaily vybraného vybavení."
+autowrap_mode = 3
+
+[node name="Stats" type="VBoxContainer" parent="MainPanel/Layout/RightColumn_Details"]
+layout_mode = 2
+
+[node name="WeightLine" type="HBoxContainer" parent="MainPanel/Layout/RightColumn_Details/Stats"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainPanel/Layout/RightColumn_Details/Stats/WeightLine"]
+layout_mode = 2
+text = "Váha:"
+
+[node name="WeightValue" type="Label" parent="MainPanel/Layout/RightColumn_Details/Stats/WeightLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0.0 kg"
+horizontal_alignment = 2
+
+[node name="Btn_Drop" type="Button" parent="MainPanel/Layout/RightColumn_Details"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+text = "ZAHODIT"
+
+[node name="Btn_Close" type="Button" parent="MainPanel/Layout/RightColumn_Details"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+text = "ZAVŘÍT"

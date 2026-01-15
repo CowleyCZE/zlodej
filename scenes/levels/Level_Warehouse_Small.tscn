@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://8mg3ccbl0x1h"]
+
+[ext_resource type="PackedScene" uid="uid://c9v6s8v7b6k6o" path="res://scenes/objects/PlanningTable.tscn" id="1_table"]
+[ext_resource type="PackedScene" uid="uid://b9v6s8v7b6k6p" path="res://scenes/objects/HackingTerminal.tscn" id="2_hterm"]
+[ext_resource type="PackedScene" uid="uid://b1v6s8v7b6k6q" path="res://scenes/objects/ShopComputer.tscn" id="3_shop"]
+
+[node name="Level_Warehouse_Small" type="Node3D"]
+
+[node name="Geometry" type="Node3D" parent="."]
+
+[node name="Floor" type="CSGBox3D" parent="Geometry"]
+use_collision = true
+size = Vector3(20, 0.1, 20)
+
+[node name="Wall1" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -10)
+use_collision = true
+size = Vector3(20, 3, 0.5)
+
+[node name="Wall2" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 10)
+use_collision = true
+size = Vector3(20, 3, 0.5)
+
+[node name="Wall3" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -10, 1.5, 0)
+use_collision = true
+size = Vector3(20, 3, 0.5)
+
+[node name="Wall4" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 10, 1.5, 0)
+use_collision = true
+size = Vector3(20, 3, 0.5)
+
+[node name="PlanningTable" parent="." instance=ExtResource("1_table")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -5)
+
+[node name="HackingTerminal" parent="." instance=ExtResource("2_hterm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.6, -8)
+
+[node name="ShopComputer" parent="." instance=ExtResource("3_shop")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.4, -8)
+
+[node name="WallOccluder" type="OccluderInstance3D" parent="Geometry"]
+visible = false
+
+[node name="Zones" type="Node3D" parent="."]
+
+[node name="ZoneA" type="Marker3D" parent="Zones"]
+
+[node name="ZoneB" type="Marker3D" parent="Zones"]
+
+[node name="Props" type="Node3D" parent="."]
+
+[node name="Shelves" type="StaticBody3D" parent="Props"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/Shelves"]
+
+[node name="Crate_Electronics" type="Node3D" parent="Props"]
+
+[node name="Lights" type="Node3D" parent="."]
+
+[node name="IndustrialLight_1" type="OmniLight3D" parent="Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+light_color = Color(1, 0.972549, 0.88235295, 1)
+light_energy = 2.0
+omni_range = 15.0
+
+[node name="NavMesh" type="NavigationRegion3D" parent="."]
+
+[node name="NPCs" type="Node3D" parent="."]
+
+[node name="Guard_Basic" type="CharacterBody3D" parent="NPCs"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NPCs/Guard_Basic"]
+
+[node name="PatrolPath" type="Path3D" parent="NPCs"]
+
+[node name="ExitZone" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ExitZone"]
+
+[node name="Decals" type="Node3D" parent="."]
+
+[node name="SkladSign" type="Label3D" parent="Decals"]
+text = "SKLAD A - ZÁKAZ VSTUPU"
+
+[node name="ExitSign" type="Label3D" parent="Decals"]
+text = "NOUZOVÝ VÝCHOD"
+
+[node name="FragileLabel" type="Label3D" parent="Decals"]
+text = "KŘEHKÉ"
