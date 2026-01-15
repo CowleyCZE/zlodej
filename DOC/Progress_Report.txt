@@ -92,3 +92,12 @@ DALŠÍ KROKY:
 *   Rozšíření Adventure Mode: Dynamické NPC rutiny v lokacích (střídání postav podle času).
 *   Audio: Integrace konkrétních SFX assetů pro stealth (kroky na různých površích).
 
+
+21. BUGFIXING A AI POLISHING (15. ledna 2026):
+    *   FIX: Opraveny kritické chyby ve skriptech Minigame_Hacking.gd (syntaktická chyba) a PlanningManager.gd (chybějící funkce select_character).
+    *   AI VYLEPŠENÍ: Guard.gd - Stráže se nyní ve stavu SEARCH aktivně rozhlížejí (otáčení hlavy), když dorazí na místo podezření.
+    *   VERIFIKACE: Upraven automatizovaný test GuardAITest.gd pro simulaci pohybu (teleport) v prostředí bez navigace, čímž byla úspěšně ověřena oprava chování stráže.
+
+STAV PROJEKTU:
+*   Projekt je stabilní, bez kritických chyb ve skriptech.
+*   AI chování je realističtější a ověřené testy.

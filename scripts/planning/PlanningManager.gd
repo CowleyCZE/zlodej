@@ -45,6 +45,13 @@ func _on_planning_activated(mission: MissionData) -> void:
 	
 	select_character(0)
 
+func select_character(index: int) -> void:
+	if index >= 0 and index < team.size():
+		selected_character_index = index
+		var char_data = team[index]
+		character_selected.emit(char_data)
+		print("Planning: Selected character ", char_data.name)
+
 # ... (middle) ...
 
 func start_recording_current() -> void:

@@ -1,21 +1,28 @@
-[gd_scene load_steps=4 format=3 uid="uid://d3v6s8v7b6k6k"]
+[gd_scene load_steps=6 format=3 uid="uid://d3v6s8v7b6k6k"]
 
 [ext_resource type="Script" path="res://scripts/ui/Minigame_Hacking.gd" id="1_h"]
 [ext_resource type="Texture2D" path="res://resources/hacking_bg_texture.tres" id="2_bg"]
+[ext_resource type="Shader" path="res://assets/materials/terminal_crt.gdshader" id="3_shader"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Terminal"]
-bg_color = Color(0, 0.05, 0, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0.8, 0, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-shadow_color = Color(0, 1, 0, 0.1)
-shadow_size = 20
+bg_color = Color(0, 0.05, 0, 0.9)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0, 0.8, 0.2, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0, 1, 0, 0.15)
+shadow_size = 30
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_crt"]
+shader = ExtResource("3_shader")
+shader_parameter/scanline_count = 200.0
+shader_parameter/scanline_opacity = 0.15
+shader_parameter/vignette_intensity = 0.5
 
 [node name="MinigameHacking" type="Control"]
 layout_mode = 3
@@ -43,10 +50,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -250.0
-offset_top = -200.0
-offset_right = 250.0
-offset_bottom = 200.0
+offset_left = -300.0
+offset_top = -250.0
+offset_right = 300.0
+offset_bottom = 250.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_Terminal")
@@ -56,13 +63,14 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -100.0
+offset_left = -150.0
 offset_top = 20.0
-offset_right = 100.0
+offset_right = 150.0
 offset_bottom = 43.0
 grow_horizontal = 2
-theme_override_colors/font_color = Color(0, 1, 0, 1)
-text = "BREACH PROTOCOL v1.0"
+theme_override_colors/font_color = Color(0, 1, 0.2, 1)
+theme_override_font_sizes/font_size = 20
+text = "PROTOKOL NARUŠENÍ v3.5"
 horizontal_alignment = 1
 
 [node name="TimerLabel" type="Label" parent="Terminal"]
@@ -70,13 +78,13 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -100.0
+offset_left = -150.0
 offset_top = 20.0
-offset_right = -20.0
+offset_right = -30.0
 offset_bottom = 43.0
 grow_horizontal = 0
 theme_override_colors/font_color = Color(0, 1, 0, 1)
-text = "SEC: 30"
+text = "ČAS: 30.0 s"
 horizontal_alignment = 2
 
 [node name="TargetSequence" type="Label" parent="Terminal"]
@@ -86,15 +94,15 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -150.0
-offset_top = -120.0
-offset_right = 150.0
-offset_bottom = -80.0
+offset_left = -250.0
+offset_top = -160.0
+offset_right = 250.0
+offset_bottom = -120.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(0, 1, 0, 1)
-theme_override_font_sizes/font_size = 24
-text = "TARGET: 1234"
+theme_override_colors/font_color = Color(0, 1, 0.5, 1)
+theme_override_font_sizes/font_size = 28
+text = "CÍLOVÝ KÓD: FF 00 A1"
 horizontal_alignment = 1
 
 [node name="GridContainer" type="GridContainer" parent="Terminal"]
@@ -104,14 +112,14 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -130.0
-offset_top = -60.0
-offset_right = 130.0
-offset_bottom = 140.0
+offset_left = -200.0
+offset_top = -80.0
+offset_right = 200.0
+offset_bottom = 160.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/h_separation = 10
-theme_override_constants/v_separation = 10
+theme_override_constants/h_separation = 15
+theme_override_constants/v_separation = 15
 columns = 4
 
 [node name="Status" type="Label" parent="Terminal"]
@@ -121,12 +129,23 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -150.0
-offset_top = -40.0
-offset_right = 150.0
-offset_bottom = -17.0
+offset_left = -200.0
+offset_top = -50.0
+offset_right = 200.0
+offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_colors/font_color = Color(0, 1, 0, 1)
-text = "INPUT REQUIRED..."
+theme_override_colors/font_color = Color(0, 1, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "ZADEJTE PROTOKOL..."
 horizontal_alignment = 1
+
+[node name="TerminalFilter" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_crt")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

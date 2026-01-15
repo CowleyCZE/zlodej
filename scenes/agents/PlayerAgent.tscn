@@ -1,13 +1,15 @@
 [gd_scene load_steps=5 format=3 uid="uid://player_agent_v3"]
 
 [ext_resource type="Script" path="res://scripts/agents/PlayerAgent.gd" id="1_agent"]
-[ext_resource type="Texture2D" uid="uid://b8j2s4s5f6j7k" path="res://icon.svg" id="2_icon"]
+[ext_resource type="Texture2D" path="res://icon.svg" id="2_icon"]
 [ext_resource type="Script" path="res://scripts/core/TacticalCamera.gd" id="3_camera"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
 radius = 32.0
 
 [node name="PlayerAgent" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 5
 script = ExtResource("1_agent")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

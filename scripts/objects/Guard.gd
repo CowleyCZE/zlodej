@@ -38,6 +38,7 @@ var suspicion_timer: float = 0.0
 var alert_meter: float = 0.0
 var investigation_target: Vector2 = Vector2.ZERO
 var player_in_sight: Node2D = null
+var search_base_rotation: float = 0.0
 
 func _ready():
 	add_to_group("guards")
@@ -89,20 +90,29 @@ func _process_ai_logic(delta):
 func _update_awareness_ui():
 	if not awareness_meter: return
 	
-	if alert_meter > 0 or current_ai_state != AIState.PATROL:
+	if alert_meter > 0 or current_ai_state in [AIState.SUSPICIOUS, AIState.SEARCH, AIState.ALERT]:
 		awareness_meter.visible = true
 		awareness_bar.value = alert_meter
 		
 		var sb = StyleBoxFlat.new()
+		sb.border_width_left = 1
+		sb.border_width_top = 1
+		sb.border_width_right = 1
+		sb.border_width_bottom = 1
+		sb.border_color = Color.BLACK
+		
 		if current_ai_state == AIState.ALERT:
 			sb.bg_color = Color.RED
-			awareness_icon.color = Color.RED
-		elif current_ai_state == AIState.SUSPICIOUS or current_ai_state == AIState.SEARCH:
+			awareness_icon.modulate = Color.RED
+		elif alert_meter > 60.0 or current_ai_state == AIState.SEARCH:
 			sb.bg_color = Color.ORANGE
-			awareness_icon.color = Color.ORANGE
-		else:
+			awareness_icon.modulate = Color.ORANGE
+		elif alert_meter > 20.0 or current_ai_state == AIState.SUSPICIOUS:
 			sb.bg_color = Color.YELLOW
-			awareness_icon.color = Color(1, 1, 0, 0)
+			awareness_icon.modulate = Color.YELLOW
+		else:
+			sb.bg_color = Color.WHITE
+			awareness_icon.modulate = Color(1, 1, 1, 0.5)
 			
 		awareness_bar.add_theme_stylebox_override("fill", sb)
 	else:
@@ -145,7 +155,7 @@ func _add_segment(p1, p2):
 
 # --- STEALTH LOGIC ---
 func _check_vision(delta):
-	if not vision_cone: return
+	if not vision_cone or is_disabled(): return
 	var bodies = vision_cone.area_2d.get_overlapping_bodies()
 	var sees_player = false
 	for body in bodies:
@@ -156,19 +166,37 @@ func _check_vision(delta):
 			if not result:
 				sees_player = true
 				player_in_sight = body
-				_escalate_alert(delta)
+				
+				# Calculate detection speed multiplier based on distance
+				var dist = global_position.distance_to(body.global_position)
+				var dist_factor = 1.0 - (dist / vision_cone.radius)
+				dist_factor = clamp(dist_factor, 0.1, 1.0)
+				
+				# Angle factor (peripheral vision is slower)
+				var to_player = (body.global_position - global_position).normalized()
+				var angle = abs(Vector2.from_angle(rotation).angle_to(to_player))
+				var angle_factor = 1.0 - (angle / deg_to_rad(vision_cone.angle_deg / 2.0))
+				angle_factor = clamp(angle_factor, 0.2, 1.0)
+				
+				var effective_speed = detection_speed * dist_factor * angle_factor
+				_escalate_alert(delta, effective_speed)
 				break
 	if not sees_player:
 		player_in_sight = null
 		_deescalate_alert(delta)
 
-func _escalate_alert(delta):
-	alert_meter += detection_speed * delta
+func _escalate_alert(delta, speed_override = -1.0):
+	var speed = speed_override if speed_override > 0 else detection_speed
+	alert_meter += speed * delta
+	
 	if alert_meter >= 100.0:
 		set_ai_state(AIState.ALERT)
-	elif alert_meter > 15.0 and current_ai_state == AIState.PATROL:
+	elif alert_meter > 20.0 and current_ai_state == AIState.PATROL:
 		investigation_target = player_in_sight.global_position
 		set_ai_state(AIState.SUSPICIOUS)
+
+func is_disabled() -> bool:
+	return current_ai_state == AIState.STUNNED or current_ai_state == AIState.DEAD
 
 func _deescalate_alert(delta):
 	if alert_meter > 0:
@@ -196,22 +224,37 @@ func _state_patrol(delta):
 
 func _state_suspicious(delta):
 	if vision_cone: vision_cone.set_alert_level(vision_cone.AlertState.SUSPICIOUS)
+	
+	# Rotate towards target
 	var dir_to_target = (investigation_target - global_position).normalized()
-	rotation = lerp_angle(rotation, dir_to_target.angle(), rotation_speed * delta)
+	var target_angle = dir_to_target.angle()
+	rotation = lerp_angle(rotation, target_angle, rotation_speed * delta)
+	
 	velocity = Vector2.ZERO
 	suspicion_timer -= delta
+	
+	# If we are looking close enough at the target or timer ends, go to SEARCH
 	if suspicion_timer <= 0:
 		set_ai_state(AIState.SEARCH)
 
 func _state_search(delta):
 	if vision_cone: vision_cone.set_alert_level(vision_cone.AlertState.SUSPICIOUS)
-	if global_position.distance_to(investigation_target) > 30.0:
+	
+	if global_position.distance_to(investigation_target) > 40.0:
+		# Moving to LKP
 		nav_agent.target_position = investigation_target
-		_move_towards(nav_agent.get_next_path_position(), walk_speed * 1.1, delta)
+		_move_towards(nav_agent.get_next_path_position(), walk_speed * 0.8, delta)
+		search_base_rotation = rotation
 	else:
+		# At LKP, look around
+		velocity = Vector2.ZERO
 		suspicion_timer -= delta
-		rotation += sin(Time.get_ticks_msec() * 0.005) * 2.0 * delta
-		if suspicion_timer <= -4.0:
+		
+		# Head bob / looking left and right
+		var look_offset = sin(Time.get_ticks_msec() * 0.003) * deg_to_rad(60.0)
+		rotation = lerp_angle(rotation, search_base_rotation + look_offset, rotation_speed * delta)
+		
+		if suspicion_timer <= -5.0: # Search for 5 seconds at the spot
 			set_ai_state(AIState.PATROL)
 
 func _state_alert(delta):
@@ -265,6 +308,7 @@ func set_ai_state(new_state):
 			if sprite: sprite.modulate = Color.ORANGE
 		AIState.SEARCH:
 			suspicion_timer = 0.0
+			search_base_rotation = rotation
 			if sprite: sprite.modulate = Color.YELLOW
 		AIState.ALERT:
 			suspicion_timer = 0.0

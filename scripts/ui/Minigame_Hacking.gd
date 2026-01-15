@@ -9,94 +9,119 @@ var completion_callback: Callable
 @onready var grid_container = $Terminal/GridContainer
 @onready var sequence_label = $Terminal/TargetSequence
 @onready var time_label = $Terminal/TimerLabel
+@onready var status_label = $Terminal/Status
+
+var hex_chars = ["00", "A1", "B2", "C3", "FF", "E4", "D5", "10", "20", "30"]
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	# Apply CRT shader to the background if it's there
+	if has_node("TerminalFilter"):
+		$TerminalFilter.visible = true
 
 func setup(difficulty: float, callback: Callable):
 	completion_callback = callback
 	sequence_length = 3 + int(difficulty)
-	time_left = 40.0 / difficulty
 	
+	# Bonus time if player has hacking kit
+	var base_time = 40.0 / difficulty
+	if InventoryManager.has_item("hacking_kit"):
+		base_time *= 1.5
+		print("HACKING: Time bonus from Hacking Kit applied.")
+		
+	time_left = base_time
 	_generate_puzzle()
 
 func _generate_target_sequence():
 	target_sequence.clear()
 	for i in range(sequence_length):
-		target_sequence.append(randi() % 10)
-	sequence_label.text = "TARGET: " + "".join(target_sequence.map(func(n): return str(n)))
+		target_sequence.append(hex_chars.pick_random())
+	sequence_label.text = "CÍLOVÝ KÓD: " + " ".join(target_sequence)
 
 func _generate_puzzle():
 	_generate_target_sequence()
+	player_sequence.clear()
+	status_label.text = "ZADEJTE PROTOKOL..."
+	status_label.modulate = Color.CYAN
 	
 	# Clear grid
 	for child in grid_container.get_children():
 		child.queue_free()
 	
-	# Prepare a list of numbers for the 16 slots
-	var grid_numbers = []
-	# 1. Add all required target numbers first to ensure they exist
-	for n in target_sequence:
-		grid_numbers.append(n)
+	var grid_pool = []
+	for s in target_sequence:
+		grid_pool.append(s)
 	
-	# 2. Fill the rest with random numbers
-	while grid_numbers.size() < 16:
-		grid_numbers.append(randi() % 10)
+	while grid_pool.size() < 16:
+		grid_pool.append(hex_chars.pick_random())
 	
-	# 3. Shuffle the numbers so the target isn't at the start
-	grid_numbers.shuffle()
+	grid_pool.shuffle()
 	
-	# 4. Create buttons
-	for num in grid_numbers:
+	for code in grid_pool:
 		var btn = Button.new()
-		btn.text = str(num)
-		btn.custom_minimum_size = Vector2(60, 60)
-		btn.pressed.connect(func(): _on_number_pressed(num))
+		btn.text = code
+		btn.custom_minimum_size = Vector2(80, 60)
+		btn.add_theme_color_override("font_color", Color.GREEN)
+		btn.pressed.connect(_on_code_pressed.bind(code, btn))
 		grid_container.add_child(btn)
 
-func _on_number_pressed(num):
+func _on_code_pressed(code: String, btn: Button):
 	if player_sequence.size() < target_sequence.size():
-		if num == target_sequence[player_sequence.size()]:
-			player_sequence.append(num)
-			$Terminal/Status.text = "CORRECT: " + "".join(player_sequence.map(func(n): return str(n)))
-			$Terminal/Status.modulate = Color.GREEN
+		if code == target_sequence[player_sequence.size()]:
+			player_sequence.append(code)
+			btn.disabled = true
+			btn.modulate = Color.DARK_GREEN
+			status_label.text = "SHODA: " + " ".join(player_sequence)
+			status_label.modulate = Color.GREEN
+			AudioManager.play_ui(null) # TODO: add blip
+			
 			if player_sequence.size() == target_sequence.size():
 				_success()
 		else:
-			player_sequence.clear()
-			$Terminal/Status.text = "ERROR - SEQUENCE RESET"
-			$Terminal/Status.modulate = Color.RED
-			# Maybe reduce time on error
-			time_left -= 2.0
+			# Reset on error
+			_reset_sequence()
+			time_left -= 3.0 # Penalty
+			status_label.text = "CHYBA - RESET SEKVENCE"
+			status_label.modulate = Color.RED
+			_flash_red()
+
+func _reset_sequence():
+	player_sequence.clear()
+	for btn in grid_container.get_children():
+		btn.disabled = false
+		btn.modulate = Color.WHITE
+
+func _flash_red():
+	var tween = create_tween()
+	$Terminal.modulate = Color.RED
+	tween.tween_property($Terminal, "modulate", Color.WHITE, 0.3)
 
 func _process(delta):
 	time_left -= delta
-	time_label.text = "SEC: " + str(max(0, int(time_left)))
+	time_label.text = "ČAS: %.1f s" % max(0, time_left)
 	
 	if time_left <= 0:
 		_fail()
 
 func _success():
 	set_process(false)
-	$Terminal/Status.text = "ACCESS GRANTED"
+	status_label.text = "PŘÍSTUP POVOLEN"
+	status_label.modulate = Color.GREEN
 	await get_tree().create_timer(1.0).timeout
 	if completion_callback.is_valid():
 		completion_callback.call(true)
-	
-	var game = get_tree().root.find_child("Game", true, false)
-	if game and game.has_method("close_current_ui"):
-		game.close_current_ui()
-	else:
-		queue_free()
+	_close()
 
 func _fail():
 	set_process(false)
-	$Terminal/Status.text = "SYSTEM LOCKED"
-	$Terminal/Status.modulate = Color.RED
-	await get_tree().create_timer(1.0).timeout
+	status_label.text = "SYSTÉM ZABLOKOVÁN"
+	status_label.modulate = Color.RED
+	await get_tree().create_timer(1.5).timeout
 	if completion_callback.is_valid():
 		completion_callback.call(false)
-	
+	_close()
+
+func _close():
 	var game = get_tree().root.find_child("Game", true, false)
 	if game and game.has_method("close_current_ui"):
 		game.close_current_ui()
