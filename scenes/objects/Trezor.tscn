@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://dpdgoejgavrr1"]
+
+[ext_resource type="Script" uid="uid://bfq0x54k5w7bq" path="res://scripts/objects/Trezor.gd" id="1_lmnop"]
+[ext_resource type="Texture2D" uid="uid://cdstvx5qe10wm" path="res://assets/models/trezor.png" id="2_qrstu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_67890"]
+size = Vector2(64, 64)
+
+[node name="Trezor" type="StaticBody2D"]
+script = ExtResource("1_lmnop")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.415, 0.415)
+texture = ExtResource("2_qrstu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_67890")
