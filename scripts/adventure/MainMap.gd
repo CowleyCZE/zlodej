@@ -1,11 +1,12 @@
 extends Node2D
 
 @onready var btn_pub: Button = $UI/Locations/Btn_Pub
-@onready var btn_cafe: Button = $UI/Locations/Btn_Cafe
+@onready var btn_cafe: Button = $UI/Locations/Btn_WineBar
 @onready var btn_hotel: Button = $UI/Locations/Btn_Hotel
 @onready var btn_start_mission: Button = $UI/Locations/Btn_StartMission
 @onready var money_label: Label = $UI/HUD_Panel/VBox/MoneyLabel
 @onready var team_label: Label = $UI/HUD_Panel/VBox/TeamLabel
+@onready var location_view: Control = $UI/LocationView
 
 func _ready() -> void:
 	# Update UI
@@ -30,15 +31,16 @@ func _update_hud() -> void:
 func _on_pub_pressed() -> void:
 	print("Vstup do Hospody U Orla...")
 	AudioManager.start_ambient("amb_pub")
-	# TODO: Open Recruitment UI
+	location_view.open("u_cerneho_orla", "Hospoda U Černého Orla")
 	
 func _on_cafe_pressed() -> void:
-	print("Vstup do Café Vltava...")
-	# TODO: Open Intel UI
-
+	print("Vstup do Vinárny u Zámku...")
+	location_view.open("vinarna_u_zamku", "Vinárna u Zámku")
+	
 func _on_hotel_pressed() -> void:
 	print("Návrat na hotel...")
 	AudioManager.start_ambient("amb_city_night") # Návrat k městu
+	location_view.hide()
 
 func _on_start_mission_pressed() -> void:
 	print("Startuji Tutorial Misi...")

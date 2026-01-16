@@ -1,6 +1,7 @@
 [gd_scene load_steps=2 format=3 uid="uid://mainmap_melnik_v3"]
 
 [ext_resource type="Script" path="res://scripts/adventure/MainMap.gd" id="1_map"]
+[ext_resource type="PackedScene" uid="uid://location_view_v1" path="res://scenes/ui/LocationView.tscn" id="2_loc_view"]
 
 [node name="MainMap" type="Node2D"]
 script = ExtResource("1_map")
@@ -94,3 +95,7 @@ text = "Reputace: Nikdo"
 [node name="TeamLabel" type="Label" parent="UI/HUD_Panel/VBox"]
 layout_mode = 2
 text = "Tým: 1/4"
+
+[node name="LocationView" parent="UI" instance=ExtResource("2_loc_view")]
+visible = false
+

@@ -12,7 +12,7 @@ var active_character: CharacterData = null # The character currently being recor
 
 # --- Data ---
 # { character_name: [ {time: 0.0, pos: Vector2(), action: "move"}, ... ] }
-var recorded_tracks: Dictionary = {} 
+var recorded_tracks: Dictionary = {}
 var current_recording_buffer: Array[Dictionary] = []
 
 # { character_name: [ {start: float, end: float}, ... ] }
@@ -88,7 +88,7 @@ func _process_recording(delta: float) -> void:
 	time_changed.emit(current_time)
 
 func record_frame(position: Vector2, velocity: Vector2, action_state: Dictionary) -> void:
-	if not is_recording: 
+	if not is_recording:
 		return
 	var frame = {
 		"time": current_time,
@@ -257,19 +257,19 @@ func get_state_at_time(character_name: String, time: float) -> Dictionary:
 		
 	# Binary search or simple iteration
 	for i in range(track.size() - 1):
-		if track[i].time <= effective_time and track[i+1].time > effective_time:
+		if track[i].time <= effective_time and track[i + 1].time > effective_time:
 			# Interpolate between frames i and i+1
 			var t_start = track[i].time
-			var t_end = track[i+1].time
+			var t_end = track[i + 1].time
 			var weight = (effective_time - t_start) / (t_end - t_start)
 			
 			var frame_a = track[i]
-			var frame_b = track[i+1]
+			var frame_b = track[i + 1]
 			
 			return {
 				"pos": lerp(frame_a.pos, frame_b.pos, weight),
 				"vel": lerp(frame_a.vel, frame_b.vel, weight),
-				"actions": frame_a.actions 
+				"actions": frame_a.actions
 			}
 			
 	return track.back() # Return last known state if time > duration
@@ -277,113 +277,60 @@ func get_state_at_time(character_name: String, time: float) -> Dictionary:
 # --- Analysis API for Timeline UI ---
 
 func analyze_track(character_name: String) -> Array:
-
 	if not recorded_tracks.has(character_name):
-
 		return []
-
-		
-
-	var track = recorded_tracks[character_name]
-
-	if track.is_empty():
-
-		return []
-
-		
-
-	var blocks = []
-
-	var current_block = null
-
 	
-
+	var track = recorded_tracks[character_name]
+	if track.is_empty():
+		return []
+	
+	var blocks = []
+	var current_block = null
+	
 	for i in range(track.size()):
-
 		var frame = track[i]
-
 		var type = "idle"
-
 		
-
 		# Determine type
-
 		if frame.actions.get("interact", false):
-
 			type = "interact"
-
 		elif frame.vel.length_squared() > 10.0: # Moving threshold
-
 			type = "move"
-
-			
-
-		if current_block == null:
-
-			current_block = {"start": frame.time, "end": frame.time, "type": type}
-
-		elif current_block.type != type:
-
-			# Close block
-
-			current_block.end = frame.time
-
-			blocks.append(current_block)
-
-			# Start new
-
-			current_block = {"start": frame.time, "end": frame.time, "type": type}
-
-		else:
-
-			# Extend
-
-			current_block.end = frame.time
-
-			
-
-	if current_block:
-
-		blocks.append(current_block)
-
 		
-
+		if current_block == null:
+			current_block = {"start": frame.time, "end": frame.time, "type": type}
+		elif current_block.type != type:
+			# Close block
+			current_block.end = frame.time
+			blocks.append(current_block)
+			# Start new
+			current_block = {"start": frame.time, "end": frame.time, "type": type}
+		else:
+			# Extend
+			current_block.end = frame.time
+	
+	if current_block:
+		blocks.append(current_block)
+	
 	return blocks
 
 
-
 func record_detection(character_name: String, time: float):
-
 	if not detection_intervals.has(character_name):
-
 		detection_intervals[character_name] = []
-
-		
-
-	var intervals = detection_intervals[character_name]
-
 	
-
+	var intervals = detection_intervals[character_name]
+	
 	if intervals.is_empty() or intervals.back().end < time - 0.2:
-
 		# New interval
-
 		intervals.append({"start": time, "end": time})
-
 	else:
-
 		# Extend existing
-
 		intervals.back().end = time
 
 
-
 func clear_detection_data(character_name: String = ""):
-
 	if character_name == "":
-
 		detection_intervals.clear()
-
 	else:
-
 		detection_intervals[character_name] = []

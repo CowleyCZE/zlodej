@@ -10,8 +10,8 @@ extends CharacterBody2D
 @export var wait_time_at_waypoints: float = 1.0
 
 @export_group("AI Parameters")
-@export var detection_speed: float = 50.0 
-@export var suspicion_cooldown: float = 5.0 
+@export var detection_speed: float = 50.0
+@export var suspicion_cooldown: float = 5.0
 @export var rotation_speed: float = 5.0
 
 # --- KOMPONENTY ---
@@ -23,7 +23,7 @@ extends CharacterBody2D
 @onready var awareness_icon = $AwarenessMeter/StateIcon
 
 # --- STAVOVÉ PROMĚNNÉ ---
-enum AIState { PATROL, SUSPICIOUS, SEARCH, ALERT, STUNNED, DEAD }
+enum AIState {PATROL, SUSPICIOUS, SEARCH, ALERT, STUNNED, DEAD}
 var current_ai_state: AIState = AIState.PATROL
 
 # Timeline Logic (Planning Mode)
@@ -42,7 +42,7 @@ var search_base_rotation: float = 0.0
 
 # Narrative / Barks
 var bark_label: Label
-var idle_bark_chance: float = 0.05 
+var idle_bark_chance: float = 0.05
 
 func _ready():
 	add_to_group("guards")
@@ -167,7 +167,7 @@ func _recalculate_path_segments():
 	path_segments.clear()
 	total_distance = 0.0
 	for i in range(patrol_points.size() - 1):
-		_add_segment(patrol_points[i], patrol_points[i+1])
+		_add_segment(patrol_points[i], patrol_points[i + 1])
 	if loop_patrol:
 		_add_segment(patrol_points[-1], patrol_points[0])
 	total_cycle_time = total_distance / walk_speed
@@ -189,7 +189,7 @@ func _check_vision(delta):
 	for body in bodies:
 		if body.is_in_group("player"):
 			var query = PhysicsRayQueryParameters2D.create(global_position, body.global_position)
-			query.collision_mask = 1 
+			query.collision_mask = 1
 			var result = get_world_2d().direct_space_state.intersect_ray(query)
 			if not result:
 				sees_player = true
@@ -354,24 +354,20 @@ func set_ai_state(new_state):
 			say_bark(["bark_guard_alert_01", "bark_guard_alert_02"].pick_random())
 		AIState.STUNNED:
 			if sprite: sprite.modulate = Color.MEDIUM_SLATE_BLUE
-			rotation += PI/2 # Fall over
+			rotation += PI / 2 # Fall over
 			if vision_cone: vision_cone.disable_temporarily(suspicion_timer)
 			collision_layer = 0 # Can walk over
 			EventBus.guard_stunned.emit(self)
 			print("Guard STUNNED for ", suspicion_timer, "s")
 		AIState.DEAD:
 			if sprite: sprite.modulate = Color.DARK_SLATE_GRAY
-			rotation += PI/2
+			rotation += PI / 2
 			if vision_cone: vision_cone.disable_temporarily(999999)
 			collision_layer = 0
 			# Heavy Heat penalty for murder
 			GameManager.add_heat(25.0)
 			EventBus.guard_killed.emit(self)
 			print("Guard KILLED. Heat increased.")
-
-	match new_state:
-		AIState.PATROL:
-			if nav_agent: nav_agent.target_position = global_position
 
 func _on_noise_heard(pos: Vector2, radius: float, _volume: float):
 	if current_ai_state == AIState.ALERT: return

@@ -23,6 +23,27 @@ func setup_from_plan(p_char: CharacterData, p_plan, p_duration: float):
 		label.text = p_char.name.left(3).to_upper()
 	queue_redraw()
 
+# Legacy setup() method for compatibility with RecordingHUD.gd
+# Called with: setup(char_name: String, blocks: Array, total_duration: float)
+func setup(char_name: String, _blocks: Array, total_duration: float):
+	# Create a minimal CharacterData for display purposes
+	var temp_char = CharacterData.new()
+	temp_char.name = char_name
+	character_data = temp_char
+	duration = total_duration
+	char_plan = null # No plan in this mode, just visualization
+	
+	# Try to find ghost controller if not injected
+	if not ghost_controller:
+		var main = get_tree().current_scene
+		if main.has_node("PlanningManager"):
+			ghost_controller = main.get_node("PlanningManager").ghost_controller
+	
+	var label = get_node_or_null("Label")
+	if label:
+		label.text = char_name.left(3).to_upper()
+	queue_redraw()
+
 func _process(_delta):
 	# Update visualization in real-time if simulation is running
 	if ghost_controller and (ghost_controller.is_recording or ghost_controller.is_playing):
@@ -109,11 +130,11 @@ func _draw():
 		
 		# Draw Signal Dependency Indicator
 		if action.wait_for_signal != "":
-			draw_circle(Vector2(start_x, h/2), 3.0, Color.RED)
+			draw_circle(Vector2(start_x, h / 2), 3.0, Color.RED)
 		
 		# Draw Signal Emission Indicator
 		if action.emit_signal_on_complete != "":
-			draw_circle(Vector2(start_x + width, h/2), 3.0, Color.GREEN)
+			draw_circle(Vector2(start_x + width, h / 2), 3.0, Color.GREEN)
 
 	# Separator
-	draw_line(Vector2(0, h-1), Vector2(w, h-1), Color(0.0, 0.5, 1.0, 0.5), 1.0)
+	draw_line(Vector2(0, h - 1), Vector2(w, h - 1), Color(0.0, 0.5, 1.0, 0.5), 1.0)

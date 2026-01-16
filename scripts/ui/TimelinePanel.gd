@@ -1,7 +1,6 @@
 extends PanelContainer
 
 signal time_scrubbed(value: float)
-signal action_selected(character: CharacterData, action_index: int)
 
 @onready var tracks_container = $VBoxContainer/TracksContainer
 @onready var time_slider = $VBoxContainer/TimeSlider
@@ -73,7 +72,7 @@ func _refresh_ui():
 func _on_plan_updated():
 	_refresh_ui()
 
-func _on_character_selected(char_data: CharacterData):
+func _on_character_selected(_char_data: CharacterData):
 	# Highlight the selected character's track?
 	pass
 

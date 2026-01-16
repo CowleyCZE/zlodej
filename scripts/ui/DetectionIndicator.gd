@@ -13,7 +13,7 @@ func setup(guard_node, player_node):
 	target = guard_node
 	player = player_node
 
-func _process(delta):
+func _process(_delta):
 	if not target or not player:
 		queue_free()
 		return

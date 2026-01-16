@@ -27,13 +27,13 @@ func _ready():
 	btn_wait.pressed.connect(func(): TimeManager.advance_time())
 
 func _update_time(slot: TimeManager.TimeSlot):
-	lbl_time.text = "DEN" if slot == TimeManager.TimeSlot.DAY else "NOC"
+	lbl_time.text = "☀️ DEN" if slot == TimeManager.TimeSlot.DAY else "🌙 NOC"
 	
-	# Visual color shift for time
+	# Vizuální posun pro čas
 	if slot == TimeManager.TimeSlot.NIGHT:
-		lbl_time.modulate = Color(0.5, 0.5, 1.0)
+		lbl_time.modulate = Color(0.6, 0.6, 1.0)
 	else:
-		lbl_time.modulate = Color(1.0, 1.0, 0.8)
+		lbl_time.modulate = Color(1.0, 1.0, 0.7)
 
 func _update_weather(weather: WeatherManager.WeatherType):
 	lbl_weather.text = "[%s]" % WeatherManager.get_weather_string()
@@ -47,17 +47,17 @@ func _update_weather(weather: WeatherManager.WeatherType):
 			lbl_weather.modulate = Color.WHITE
 
 func _update_wallet(amount: int):
-	lbl_wallet.text = "Peníze: %d CZK" % amount
-	# Flash effect could be added here
+	lbl_wallet.text = "💰 %d CZK" % amount
+	# Efekt záblesku při změně peněz
 	var tween = create_tween()
 	tween.tween_property(lbl_wallet, "scale", Vector2(1.1, 1.1), 0.1)
 	tween.tween_property(lbl_wallet, "scale", Vector2(1.0, 1.0), 0.1)
 
 func _update_reputation(amount: int):
-	lbl_reputation.text = "Reputace: %d" % amount
+	lbl_reputation.text = "⭐ %d" % amount
 
 func _update_heat(amount: float):
-	lbl_heat.text = "Hledanost: %d%%" % int(amount)
+	lbl_heat.text = "🔥 %d%%" % int(amount)
 	
 	# Visual feedback based on heat level
 	if amount > 80:

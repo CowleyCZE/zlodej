@@ -1,0 +1,75 @@
+[gd_scene load_steps=2 format=3 uid="uid://recruitment_row_v1"]
+
+[ext_resource type="Script" path="res://scripts/ui/RecruitmentRow.gd" id="1_row_script"]
+
+[node name="RecruitmentRow" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 100)
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 100.0
+grow_horizontal = 2
+script = ExtResource("1_row_script")
+
+[node name="HBox" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="PortraitData" type="VBoxContainer" parent="HBox"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="Portrait" type="ColorRect" parent="HBox/PortraitData"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+color = Color(0.2, 0.2, 0.2, 1)
+
+[node name="MainInfo" type="VBoxContainer" parent="HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="HBox/MainInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Josef \"Pepík\" Novák"
+
+[node name="RoleLabel" type="Label" parent="HBox/MainInfo"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+text = "Role: ŘIDIČ (Driver)"
+
+[node name="StatsBox" type="HBoxContainer" parent="HBox/MainInfo"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Stat1" type="Label" parent="HBox/MainInfo/StatsBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 1, 0.5, 1)
+theme_override_font_sizes/font_size = 12
+text = "DRIVING: 90"
+
+[node name="Stat2" type="Label" parent="HBox/MainInfo/StatsBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.6)
+theme_override_font_sizes/font_size = 12
+text = "LOYALTY: 50"
+
+[node name="ActionPanel" type="VBoxContainer" parent="HBox"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="CostLabel" type="Label" parent="HBox/ActionPanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0, 1)
+text = "5 000 CZK"
+horizontal_alignment = 1
+
+[node name="HireButton" type="Button" parent="HBox/ActionPanel"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "NAJMOUT"
+
+[connection signal="pressed" from="HBox/ActionPanel/HireButton" to="." method="_on_hire_button_pressed"]

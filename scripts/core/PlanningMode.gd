@@ -92,7 +92,7 @@ func _on_time_changed(time: float) -> void:
 			agent.set_detection_warning(detected)
 			if detected:
 				planning_manager.ghost_controller.record_detection(agent_name, time)
-			continue 
+			continue
 		
 		var state = planning_manager.ghost_controller.get_state_at_time(agent_name, time)
 		if not state.is_empty():
@@ -120,6 +120,12 @@ func _on_recording_started(character: CharacterData) -> void:
 			agent.apply_state(start_state)
 
 func _on_mission_activated(mission: MissionData) -> void:
+	# Update UI with Mission Info
+	if lbl_obj_name:
+		lbl_obj_name.text = mission.name
+	if lbl_obj_desc:
+		lbl_obj_desc.text = mission.briefing.left(100) + ("..." if mission.briefing.length() > 100 else "")
+		
 	load_level(mission.target_location)
 	if path_visualizer:
 		path_visualizer.get_parent().remove_child(path_visualizer)
@@ -133,11 +139,14 @@ func load_level(path: String) -> void:
 	if level_packed:
 		current_level_node = level_packed.instantiate()
 		blueprint_view.add_child(current_level_node)
-		blueprint_view.move_child(current_level_node, 0) 
-	if GameManager.current_mission:
-		_apply_intel_fog(GameManager.current_mission)
+		blueprint_view.move_child(current_level_node, 0)
 	else:
 		push_error("Failed to load level: " + path)
+		return
+		
+	if GameManager.current_mission:
+		_apply_intel_fog(GameManager.current_mission)
+
 
 func _apply_intel_fog(mission: MissionData) -> void:
 	var has_arch = mission.intel_flags.get("architecture", false)
@@ -183,7 +192,7 @@ func spawn_team() -> void:
 		agent.position = spawn_pos
 		blueprint_view.add_child(agent)
 		agent.setup(char_data, planning_manager.ghost_controller)
-		agent.set_mode(PlayerAgent.Mode.PLAYBACK) 
+		agent.set_mode(PlayerAgent.Mode.PLAYBACK)
 		agents[char_data.name] = agent
 	planning_manager.select_character(0)
 

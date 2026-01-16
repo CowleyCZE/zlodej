@@ -33,10 +33,10 @@ extends Resource
 @export var strength: int = 50
 
 # Osobnostní rysy (0.0 - 100.0)
-@export var greed: float = 50.0       # Jak moc si vezme
-@export var loyalty: float = 50.0     # Zůstane s vámi?
-@export var nerves: float = 50.0      # Stabilita pod tlakem
-@export var dexterity: float = 50.0   # Obratnost
+@export var greed: float = 50.0 # Jak moc si vezme
+@export var loyalty: float = 50.0 # Zůstane s vámi?
+@export var nerves: float = 50.0 # Stabilita pod tlakem
+@export var dexterity: float = 50.0 # Obratnost
 
 # Stav
 @export var is_hirable: bool = true
@@ -61,37 +61,21 @@ func add_item(item_id: String) -> void:
 	inventory.append(item_id)
 
 func remove_item(item_id: String) -> bool:
-
 	if has_item(item_id):
-
 		inventory.erase(item_id)
-
 		return true
-
 	return false
 
 
-
 func gain_experience(amount: int = 1):
-
 	print("CHARACTER: ", name, " gained experience!")
-
 	# Improve random skills (0-100 limit)
-
 	var skills = ["driving", "lock_picking", "electronics", "stealth", "strength"]
-
 	for i in range(amount):
-
 		var target = skills.pick_random()
-
 		var current_val = get(target)
-
 		if current_val < 100:
-
 			set(target, current_val + randi_range(1, 3))
-
 			print("  - Skill improved: ", target, " to ", get(target))
-
 	
-
 	satisfaction = clamp(satisfaction + 5.0, 0.0, 100.0)

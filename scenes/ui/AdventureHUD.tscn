@@ -17,7 +17,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.0509804, 0.105882, 0.164706, 0.862745)
+color = Color(0.0627451, 0.0627451, 0.0784314, 0.823529)
 
 [node name="Line" type="ColorRect" parent="."]
 layout_mode = 1
@@ -55,7 +55,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
-text = "Reputace: 0"
+text = "⭐ 0"
 vertical_alignment = 1
 
 [node name="Heat" type="Label" parent="HBox"]
@@ -63,7 +63,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.2, 0.2, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
-text = "Hledanost: 0%"
+text = "🔥 0%"
 vertical_alignment = 1
 
 [node name="VSeparator2" type="VSeparator" parent="HBox"]
@@ -75,7 +75,7 @@ theme_override_colors/font_color = Color(0.8, 0.8, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 18
-text = "DEN"
+text = "☀️ DEN"
 vertical_alignment = 1
 
 [node name="WeatherLabel" type="Label" parent="HBox"]
@@ -102,6 +102,6 @@ size_flags_horizontal = 3
 layout_mode = 2
 theme_override_colors/font_color = Color(0.960784, 0.772549, 0.0941176, 1)
 theme_override_font_sizes/font_size = 22
-text = "Peníze: 0 CZK"
+text = "💰 0 CZK"
 vertical_alignment = 1
 pivot_offset = Vector2(100, 15)
