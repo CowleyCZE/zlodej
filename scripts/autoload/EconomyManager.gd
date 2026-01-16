@@ -124,5 +124,62 @@ func purchase(item_id: String) -> bool:
 	if wallet >= item.price:
 		if InventoryManager.add_item(item, 1):
 			wallet -= item.price
+			SaveManager.save_game()
 			return true
 	return false
+
+func add_money(amount: int):
+	wallet += amount
+	SaveManager.save_game()
+
+func spend_money(amount: int) -> bool:
+
+	if wallet >= amount:
+
+		wallet -= amount
+
+		SaveManager.save_game()
+
+		return true
+
+	return false
+
+
+
+func distribute_loot(total_loot: int, hired_team: Array[CharacterData]):
+
+	print("ECONOMY: Distributing loot: ", total_loot, " CZK")
+
+	
+
+	# 15% Administration/Fence cut (Fence fee)
+
+	var fence_cut = int(total_loot * 0.15)
+
+	var available_loot = total_loot - fence_cut
+
+	
+
+	var team_payments = 0
+
+	for character in hired_team:
+
+		var share_amount = int(total_loot * (character.loot_share_percent / 100.0))
+
+		character.expected_payment = share_amount
+
+		team_payments += share_amount
+
+		# In a full game, we would add this to character's career stats
+
+		print("  - Pay to ", character.name, ": ", share_amount, " CZK (", character.loot_share_percent, "%)")
+
+	
+
+	var player_profit = available_loot - team_payments
+
+	add_money(player_profit)
+
+	print("  - Player Profit: ", player_profit, " CZK")
+
+	print("  - Fence Cut: ", fence_cut, " CZK")

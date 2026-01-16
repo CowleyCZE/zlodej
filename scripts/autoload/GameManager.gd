@@ -1,6 +1,6 @@
 extends Node
 
-enum State {MENU, ADVENTURE, PLANNING, ACTION, RESULTS}
+enum State {MENU, ADVENTURE, HIDEOUT, PLANNING, ACTION, RESULTS}
 
 var current_state: State = State.MENU
 var player_name: String = ""

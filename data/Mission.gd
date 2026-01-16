@@ -1,6 +1,6 @@
 # res://Data/Mission.gd
 extends Resource
-class_name Mission
+# class_name Mission
 
 @export var id: String
 @export var region_id: String

@@ -4,7 +4,7 @@ extends InteractiveObject
 @export var weight: float = 1.0
 @export var is_main_objective: bool = false
 
-func _on_interact(agent: Node) -> void:
+func _on_interact(_agent: Node) -> void:
 	print("Sebrán loot: ", object_name, " (", value, " CZK)")
 	
 	if is_main_objective:

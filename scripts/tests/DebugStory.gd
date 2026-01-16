@@ -9,7 +9,7 @@ func _run():
 	# Ale pro jednoduchost si vytvoříme novou instanci pro izolovaný test
 	
 	var story_manager = load("res://scripts/autoload/StoryManager.gd").new()
-	var game_manager = load("res://scripts/autoload/GameManager.gd").new()
+	var _game_manager = load("res://scripts/autoload/GameManager.gd").new()
 	
 	# Mock EventBus (protože ten je taky autoload)
 	# Pro tento test stačí, když StoryManager nebude padat na volání EventBusu

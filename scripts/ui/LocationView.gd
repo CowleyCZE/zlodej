@@ -50,26 +50,18 @@ func _refresh_characters():
 	for child in char_container.get_children():
 		child.queue_free()
 		
-	var current_world_time = TimeManager.current_slot
+	var time_key = TimeManager.get_schedule_key()
 	
 	for character in AdventureManager.available_characters:
-		if character.spawn_location == current_location_id:
+		# Check if character is at this location at this time
+		var char_location = character.schedule.get(time_key, "")
+		
+		if char_location == current_location_id:
 			# Special case for Honza
 			if character.name == "Honza" and not StoryManager.story_flags["tutorial_call_received"]:
 				continue
-			
-			# Time-based availability
-			# character.availability_slot is CharacterData.TimeSlot (0:DAY, 1:NIGHT, 2:ALWAYS)
-			# current_world_time is TimeManager.TimeSlot (0:DAY, 1:NIGHT)
-			
-			var is_available = false
-			if character.availability_slot == 2: # ALWAYS
-				is_available = true
-			elif int(character.availability_slot) == int(current_world_time):
-				is_available = true
 				
-			if is_available:
-				_add_character_row(character)
+			_add_character_row(character)
 
 func _add_character_row(character: CharacterData):
 	var panel = PanelContainer.new()
@@ -133,6 +125,15 @@ func _add_character_row(character: CharacterData):
 
 func _on_talk_pressed(character: CharacterData):
 	var text = character.greeting_text
+	
+	# Special Narrative Overrides (from Narrative_Melnik_2025.md)
+	if character.name == "Honza":
+		text = NarrativeManager.get_honza_greet()
+	elif character.name == "Petra" and NarrativeManager.loop_count > 1:
+		text = tr("npc_petra_loop_01")
+	elif character.name == "Josef" and NarrativeManager.loop_count > 2:
+		text = tr("npc_josef_loop_01")
+		
 	if text == "":
 		text = "Nemám ti teď co říct, šéfe."
 	

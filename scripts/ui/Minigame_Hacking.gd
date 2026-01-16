@@ -17,7 +17,7 @@ func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	# Apply CRT shader to the background if it's there
 	if has_node("TerminalFilter"):
-		$TerminalFilter.visible = true
+		$TerminalFilter.visible = PerformanceManager.use_complex_shaders()
 
 func setup(difficulty: float, callback: Callable):
 	completion_callback = callback
@@ -73,12 +73,13 @@ func _on_code_pressed(code: String, btn: Button):
 			btn.modulate = Color.DARK_GREEN
 			status_label.text = "SHODA: " + " ".join(player_sequence)
 			status_label.modulate = Color.GREEN
-			AudioManager.play_ui(null) # TODO: add blip
+			AudioManager.play_tool_sfx("hacking_typing")
 			
 			if player_sequence.size() == target_sequence.size():
 				_success()
 		else:
 			# Reset on error
+			AudioManager.play_ui_sound("ui_error")
 			_reset_sequence()
 			time_left -= 3.0 # Penalty
 			status_label.text = "CHYBA - RESET SEKVENCE"
@@ -104,6 +105,7 @@ func _process(delta):
 		_fail()
 
 func _success():
+	AudioManager.play_tool_sfx("hacking_success")
 	set_process(false)
 	status_label.text = "PŘÍSTUP POVOLEN"
 	status_label.modulate = Color.GREEN

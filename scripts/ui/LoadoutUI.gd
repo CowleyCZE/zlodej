@@ -1,71 +1,77 @@
+class_name LoadoutUI
 extends Control
 
-@onready var global_list = $Panel/HBox/GlobalInv/ItemList
-@onready var char_list = $Panel/HBox/CharInv/ItemList
-@onready var char_label = $Panel/HBox/CharInv/Label
+@onready var team_container = $Main/TeamScroll/TeamContainer
+@onready var stash_container = $Main/InventoryScroll/StashContainer
+@onready var btn_close = $Main/Btn_Done
 
-var current_char: CharacterData
+var planning_manager
 
-func setup(character: CharacterData):
-	current_char = character
-	char_label.text = character.name
-	refresh()
+func setup(manager):
+	planning_manager = manager
+	_refresh_stash()
+	_refresh_team()
 
-func refresh():
-	global_list.clear()
-	char_list.clear()
-	
-	# Global Inventory
+func _ready():
+	if btn_close:
+		btn_close.pressed.connect(_on_close_pressed)
+
+func _refresh_stash():
+	for child in stash_container.get_children():
+		child.queue_free()
+		
 	for entry in InventoryManager.items:
-		var item = entry.item
-		global_list.add_item(item.name + " (" + str(entry.quantity) + ")", item.icon)
-		global_list.set_item_metadata(global_list.get_item_count() - 1, item)
+		var btn = Button.new()
+		btn.text = "%s (x%d)" % [entry.item.name, entry.quantity]
+		btn.custom_minimum_size = Vector2(150, 40)
+		btn.pressed.connect(_on_item_to_team.bind(entry.item))
+		stash_container.add_child(btn)
 
-	# Character Inventory
-	for item_id in current_char.inventory:
-		# Try to find resource to get name/icon
-		var item_res = _find_item_resource(item_id)
-		if item_res:
-			char_list.add_item(item_res.name, item_res.icon)
-		else:
-			char_list.add_item(item_id) # Fallback ID
-		char_list.set_item_metadata(char_list.get_item_count() - 1, item_id)
+func _refresh_team():
+	for child in team_container.get_children():
+		child.queue_free()
+		
+	if not planning_manager: return
+	
+	for character in planning_manager.team:
+		var panel = PanelContainer.new()
+		var vbox = VBoxContainer.new()
+		panel.add_child(vbox)
+		
+		var name_lbl = Label.new()
+		name_lbl.text = character.name
+		vbox.add_child(name_lbl)
+		
+		# Show current inventory of this character
+		var item_hbox = HBoxContainer.new()
+		vbox.add_child(item_hbox)
+		
+		for item_id in character.inventory:
+			var item_lbl = Label.new()
+			item_lbl.text = "[" + item_id + "]"
+			item_lbl.modulate = Color.CYAN
+			item_hbox.add_child(item_lbl)
+			
+			var rem_btn = Button.new()
+			rem_btn.text = "x"
+			rem_btn.pressed.connect(_on_remove_item.bind(character, item_id))
+			item_hbox.add_child(rem_btn)
+			
+		team_container.add_child(panel)
 
-func _find_item_resource(id: String) -> InventoryItem:
-	# 1. Search global inventory first (fastest)
-	for entry in InventoryManager.items:
-		if entry.item.id == id:
-			return entry.item
-	
-	# 2. Try loading from standard path (Convention)
-	# Assuming items are stored in res://resources/items/
-	# This requires the user to maintain this structure
-	# For MVP, we might just return null if not in global
-	return null
+func _on_item_to_team(item: InventoryItem):
+	# Add to currently selected character in planning
+	var char_idx = planning_manager.selected_character_index
+	if char_idx >= 0 and char_idx < planning_manager.team.size():
+		var character = planning_manager.team[char_idx]
+		character.add_item(item.id)
+		# For simulation, we remove from global inventory? Or keep?
+		# GDD implies managing equipment, usually it means assigning.
+		_refresh_team()
 
-func _on_global_item_activated(index):
-	var item = global_list.get_item_metadata(index) as InventoryItem
-	if InventoryManager.remove_item(item.id, 1):
-		current_char.add_item(item.id)
-		refresh()
-
-func _on_char_item_activated(index):
-	var item_id = char_list.get_item_metadata(index) as String
-	
-	# We need the resource to add back
-	var item_res = _find_item_resource(item_id)
-	
-	# If we can't find the resource, we can't add it back safely to InventoryManager 
-	# because it expects a Resource.
-	# HACK: If we can't find it, we assume it's lost or create a dummy?
-	# Better: Don't allow moving if resource missing.
-	
-	if item_res:
-		if current_char.remove_item(item_id):
-			InventoryManager.add_item(item_res, 1)
-			refresh()
-	else:
-		print("Error: Cannot return item, resource definition not found.")
+func _on_remove_item(character: CharacterData, item_id: String):
+	character.remove_item(item_id)
+	_refresh_team()
 
 func _on_close_pressed():
-	hide()
+	visible = false

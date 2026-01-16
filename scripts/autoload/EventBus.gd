@@ -62,3 +62,5 @@ signal request_quit_game
 signal request_lockpick_minigame(difficulty: float, callback: Callable)
 @warning_ignore("unused_signal")
 signal request_hacking_minigame(difficulty: float, callback: Callable)
+@warning_ignore("unused_signal")
+signal request_remote_unlock(group_id: String)

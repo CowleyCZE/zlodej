@@ -11,9 +11,78 @@
 
 [sub_resource type="GDScript" id="GDScript_1"]
 script/source = "extends Node2D
+
+var current_step: int = -1
+var player: Node2D
+var door: Node2D
+
 func _ready():
-	# Reset state for tutorial
 	GameManager.main_loot_collected = false
+	
+	player = get_node_or_null(\"PlayerAgent\")
+	door = get_node_or_null(\"Props/Door\")
+	var terminal = get_node_or_null(\"Props/HackingTerminal\")
+	var extraction = get_node_or_null(\"Props/ExtractionZone\")
+	
+	if door:
+		# InteractiveObject emits 'interacted' signal
+		if door.has_signal(\"interacted\"):
+			door.interacted.connect(_on_door_opened)
+			
+	if extraction:
+		extraction.body_entered.connect(_on_extraction_enter)
+
+	# Nerf guard for tutorial difficulty
+	var guard = get_node_or_null("Guards/Guard1")
+	if guard:
+		guard.walk_speed = 60.0
+		guard.detection_speed = 25.0
+		var cone = guard.get_node_or_null("VisionCone")
+		if cone:
+			cone.radius = 200.0
+			cone.angle_deg = 45.0
+		
+	# Start delayed
+	get_tree().create_timer(1.5).timeout.connect(_start_tutorial)
+
+func _process(delta):
+	if current_step == 0:
+		if player and player.velocity.length() > 5.0:
+			_step_moving()
+
+	if current_step == 3:
+		if GameManager.main_loot_collected:
+			_step_escape()
+
+func _start_tutorial():
+	current_step = 0
+	_talk(\"Vítej v tréninku, zloději. Klepnutím na podlahu se přesuneš.\")
+
+func _step_moving():
+	current_step = 1
+	_talk(\"Dobře. Vidíš ty dveře před sebou? Jsou zamčené. Dojdi k nim a klikni na ně pro interakci.\")
+
+func _on_door_opened(_agent):
+	if current_step == 1:
+		current_step = 2
+		# Wait a bit so the door opens visually
+		get_tree().create_timer(0.5).timeout.connect(func():
+			_talk(\"Výborně. Uvnitř je stráž. Vyhni se jejímu kuželu vidění (červená zóna) a hackni terminál vpravo.\")
+			current_step = 3
+		)
+
+func _step_escape():
+	current_step = 4
+	_talk(\"Máš data! Skvělá práce. Teď rychle zpátky do startovní zóny (Zelený kruh) a zmiz!\")
+
+func _on_extraction_enter(body):
+	if body == player and GameManager.main_loot_collected:
+		# Mission complete handled by ExtractionZone logic usually, but we can enforce feedback
+		_talk(\"Mise splněna. Jsi připraven na Mělník.\")
+
+func _talk(text: String):
+	# Use Honza portrait placeholder if available, or generic
+	EventBus.request_start_dialogue.emit(\"Honza\", text, \"res://assets/characters/honza_portrait.png\", [], null)
 "
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_2"]
@@ -36,7 +105,7 @@ navigation_polygon = SubResource("NavigationPolygon_2")
 [node name="Walls" type="StaticBody2D" parent="."]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Walls"]
-polygon = PackedVector2Array(0, 0, 1200, 0, 1200, 800, 0, 800, 0, 20, 1180, 20, 1180, 780, 20, 780, 20, 0)
+polygon = PackedVector2Array(0, 0, 1200, 0, 1200, 800, 0, 800, 0.1, 20, 1180, 20, 1180, 780, 20, 780, 20, 0.1)
 
 [node name="Props" type="Node2D" parent="."]
 

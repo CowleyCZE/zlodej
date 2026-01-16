@@ -3,8 +3,8 @@ extends Node2D
 @onready var sprite = $Sprite2D
 @onready var label = $Label
 
-func setup(action_name: String, duration: float, position: Vector2, icon_texture: Texture2D = null):
-	sself.global_position = position
+func setup(action_name: String, duration: float, _position: Vector2, icon_texture: Texture2D = null):
+	self.global_position = _position
 	if icon_texture:
 		sprite.texture = icon_texture
 	else:

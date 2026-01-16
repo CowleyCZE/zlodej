@@ -8,9 +8,11 @@ var current_plan: PlanningData
 # State
 var selected_character_index: int = 0
 var team: Array[CharacterData] = []
+var validation_errors: Array = []
 
 signal character_selected(character: CharacterData)
 signal plan_updated # Emit when any change happens to the plan
+signal plan_validated(errors: Array)
 
 func _ready() -> void:
 	# Initialize controller
@@ -60,14 +62,14 @@ func start_recording_current() -> void:
 		ghost_controller.start_recording(char_data)
 
 func commit_current_recording() -> void:
-	ghost_controller.stop_recording(true)
+	ghost_controller.stop_recording()
 	# Conversion: Recording to Waypoints
 	if selected_character_index >= 0 and selected_character_index < team.size():
 		_convert_recording_to_waypoints(team[selected_character_index])
 		plan_updated.emit()
 
 func discard_current_recording() -> void:
-	ghost_controller.stop_recording(false)
+	ghost_controller.stop_recording()
 
 func _convert_recording_to_waypoints(char_data: CharacterData) -> void:
 	var raw_track = ghost_controller.recorded_tracks.get(char_data.name, [])
@@ -111,5 +113,89 @@ func _convert_recording_to_waypoints(char_data: CharacterData) -> void:
 	# Sort actions just in case (though linear scan produces sorted)
 	plan.actions.sort_custom(func(a, b): return a.time < b.time)
 
+func assign_tool_to_action(char_data: CharacterData, action_index: int, tool_id: String) -> void:
+	var plan = current_plan.get_or_create_plan_for(char_data)
+	if action_index >= 0 and action_index < plan.actions.size():
+		plan.actions[action_index].selected_tool_id = tool_id
+		plan_updated.emit()
+		ghost_controller.set_plan(current_plan) # Recalculate if needed
+
+func add_synchronization_wait(char_data: CharacterData, action_index: int, signal_name: String) -> void:
+	var plan = current_plan.get_or_create_plan_for(char_data)
+	if action_index >= 0 and action_index < plan.actions.size():
+		plan.actions[action_index].wait_for_signal = signal_name
+		plan_updated.emit()
+		ghost_controller.set_plan(current_plan) # Crucial: triggers delay recalculation
+
+func set_action_emit_signal(char_data: CharacterData, action_index: int, signal_name: String) -> void:
+	var plan = current_plan.get_or_create_plan_for(char_data)
+	if action_index >= 0 and action_index < plan.actions.size():
+		plan.actions[action_index].emit_signal_on_complete = signal_name
+		plan_updated.emit()
+		ghost_controller.set_plan(current_plan)
+
+func remove_action(char_data: CharacterData, action_index: int) -> void:
+	var plan = current_plan.get_or_create_plan_for(char_data)
+	if action_index >= 0 and action_index < plan.actions.size():
+		plan.actions.remove_at(action_index)
+		plan_updated.emit()
+		ghost_controller.set_plan(current_plan)
+
+func add_wait_action(char_data: CharacterData, time: float, duration: float = 2.0) -> void:
+	var plan = current_plan.get_or_create_plan_for(char_data)
+	var new_action = PlanningData.TimelineAction.new()
+	new_action.time = time
+	new_action.type = "WAIT"
+	new_action.duration = duration
+	
+	plan.actions.append(new_action)
+	plan.actions.sort_custom(func(a, b): return a.time < b.time)
+	
+	plan_updated.emit()
+	ghost_controller.set_plan(current_plan)
+	print("PlanningManager: Added WAIT action for ", char_data.name, " at ", time)
+
 func get_final_plan() -> PlanningData:
+	validate_plan()
+	# Attach raw tracks for Action Mode execution
+	current_plan.set_meta("recorded_tracks", ghost_controller.recorded_tracks.duplicate())
 	return current_plan
+
+func validate_plan() -> bool:
+	validation_errors.clear()
+	_check_collisions()
+	# TODO: _check_noise_levels()
+	plan_validated.emit(validation_errors)
+	return validation_errors.is_empty()
+
+func _check_collisions():
+	if not current_plan or current_plan.characters.size() < 2:
+		return
+		
+	var duration = current_plan.timeline_duration
+	var step = 0.5 # Check every half second
+	
+	for t in range(0, int(duration / step)):
+		var time = t * step
+		
+		# Compare every pair of characters
+		for i in range(current_plan.characters.size()):
+			for j in range(i + 1, current_plan.characters.size()):
+				var char1 = current_plan.characters[i]
+				var char2 = current_plan.characters[j]
+				
+				var plan1 = current_plan.get_or_create_plan_for(char1)
+				var plan2 = current_plan.get_or_create_plan_for(char2)
+				
+				var pos1 = plan1.get_position_at_time(time)
+				var pos2 = plan2.get_position_at_time(time)
+				
+				if pos1.distance_to(pos2) < 30.0: # Threshold for collision (pixels)
+					validation_errors.append({
+						"type": "COLLISION",
+						"time": time,
+						"chars": [char1.name, char2.name],
+						"pos": pos1
+					})
+					# We found a collision for this pair, skip to next pair or time?
+					# For now, collect all major ones

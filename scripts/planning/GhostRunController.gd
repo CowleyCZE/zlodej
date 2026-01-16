@@ -1,4 +1,3 @@
-class_name GhostRunController
 extends Node
 
 # --- Configuration ---

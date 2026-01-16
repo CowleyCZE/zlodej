@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Zlodej"
+config/name="Zlodej Melnik"
 run/main_scene="res://scenes/core/Game.tscn"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
@@ -29,10 +29,24 @@ InventoryManager="*res://scripts/autoload/InventoryManager.gd"
 AudioManager="*res://scripts/autoload/AudioManager.gd"
 PerformanceManager="*res://scripts/autoload/PerformanceManager.gd"
 TimeManager="*res://scripts/autoload/TimeManager.gd"
+IntelligenceSystem="*res://scripts/systems/IntelligenceSystem.gd"
 MapEventManager="*res://scripts/autoload/MapEventManager.gd"
 WeatherManager="*res://scripts/autoload/WeatherManager.gd"
 StoryManager="*res://scripts/autoload/StoryManager.gd"
+NarrativeManager="*res://scripts/autoload/NarrativeManager.gd"
+VFXManager="*res://scripts/autoload/VFXManager.gd"
+MattManager="*res://scripts/autoload/MattManager.gd"
 MissionDB="*res://data/MissionLoader.gd"
+
+[display]
+
+window/size/viewport_width=1080
+window/size/viewport_height=1920
+window/size/window_width_override=540
+window/size/window_height_override=960
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/handheld/orientation="portrait"
 
 [dotnet]
 
@@ -41,6 +55,21 @@ project/assembly_name="Test1"
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/godot_mcp/plugin.cfg", "res://addons/godot_scribe_plugin/plugin.cfg")
+
+[gui]
+
+theme/custom="res://resources/UITheme.tres"
+
+[importer_defaults]
+
+texture_2d={
+"compress/mode": 0,
+"mipmaps/generate": false,
+"texture/filter": 0
+}
+svg={
+"scale": 4.0
+}
 
 [input]
 
@@ -103,6 +132,10 @@ interact={
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":70,"key_label":0,"unicode":102,"location":0,"echo":false,"script":null)
 ]
 }
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://data/localization.cs.translation", "res://data/localization.en.translation")
 
 [rendering]
 

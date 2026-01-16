@@ -40,10 +40,15 @@ var investigation_target: Vector2 = Vector2.ZERO
 var player_in_sight: Node2D = null
 var search_base_rotation: float = 0.0
 
+# Narrative / Barks
+var bark_label: Label
+var idle_bark_chance: float = 0.05 
+
 func _ready():
 	add_to_group("guards")
 	add_to_group("timeline_listeners")
 	_recalculate_path_segments()
+	_setup_bark_ui()
 	
 	if not has_node("NavigationAgent2D"):
 		var agent = NavigationAgent2D.new()
@@ -58,6 +63,29 @@ func _ready():
 	var noise_system = get_node_or_null("/root/NoiseSystem")
 	if noise_system:
 		noise_system.noise_created.connect(_on_noise_heard)
+
+func _setup_bark_ui():
+	bark_label = Label.new()
+	bark_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	bark_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	bark_label.position = Vector2(-100, -80)
+	bark_label.custom_minimum_size = Vector2(200, 40)
+	bark_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	bark_label.add_theme_font_size_override("font_size", 14)
+	bark_label.add_theme_color_override("font_shadow_color", Color.BLACK)
+	bark_label.add_theme_constant_override("shadow_outline_size", 2)
+	add_child(bark_label)
+	bark_label.hide()
+
+func say_bark(bark_key: String):
+	if bark_label:
+		bark_label.text = tr(bark_key)
+		bark_label.modulate.a = 1.0
+		bark_label.show()
+		var tween = create_tween()
+		tween.tween_interval(2.5)
+		tween.tween_property(bark_label, "modulate:a", 0.0, 0.5)
+		tween.finished.connect(bark_label.hide)
 
 func _physics_process(delta):
 	if current_ai_state == AIState.DEAD or current_ai_state == AIState.STUNNED:
@@ -216,6 +244,11 @@ func _state_patrol(delta):
 	if global_position.distance_to(target) < 20.0:
 		patrol_wait_timer -= delta
 		if patrol_wait_timer <= 0:
+			# Chance to bark when starting new patrol segment
+			if randf() < idle_bark_chance:
+				var idle_barks = ["bark_guard_idle_01", "bark_guard_idle_02", "bark_guard_idle_03"]
+				say_bark(idle_barks.pick_random())
+				
 			current_patrol_index = (current_patrol_index + 1) % patrol_points.size()
 			patrol_wait_timer = wait_time_at_waypoints
 	else:
@@ -297,15 +330,19 @@ func set_ai_state(new_state):
 	# Cleanup old state
 	if current_ai_state == AIState.DEAD: return # Once dead, stay dead
 	
+	var old_state = current_ai_state
 	current_ai_state = new_state
 	
 	match new_state:
 		AIState.PATROL:
 			if nav_agent: nav_agent.target_position = global_position
 			if sprite: sprite.modulate = Color.RED
+			if old_state == AIState.SUSPICIOUS or old_state == AIState.SEARCH:
+				say_bark("bark_guard_susp_03") # "Asi jen krysy."
 		AIState.SUSPICIOUS:
 			suspicion_timer = 2.0
 			if sprite: sprite.modulate = Color.ORANGE
+			say_bark(["bark_guard_susp_01", "bark_guard_susp_02"].pick_random())
 		AIState.SEARCH:
 			suspicion_timer = 0.0
 			search_base_rotation = rotation
@@ -314,6 +351,7 @@ func set_ai_state(new_state):
 			suspicion_timer = 0.0
 			if sprite: sprite.modulate = Color.RED
 			GameManager.add_heat(10.0)
+			say_bark(["bark_guard_alert_01", "bark_guard_alert_02"].pick_random())
 		AIState.STUNNED:
 			if sprite: sprite.modulate = Color.MEDIUM_SLATE_BLUE
 			rotation += PI/2 # Fall over

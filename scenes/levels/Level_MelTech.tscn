@@ -13,6 +13,17 @@
 script/source = "extends Node2D
 func _ready():
 	GameManager.main_loot_collected = false
+	
+	# Configure MelTech interactions
+	var term = get_node_or_null(\"Props/Terminal_Security\")
+	var door = get_node_or_null(\"Props/Door_ServerRoom\")
+	
+	if term and door:
+		term.unlocks_group_id = \"server_door\"
+		door.remote_group_id = \"server_door\"
+		door.is_locked = true
+		# Logic: Locked by default. Hacking terminal unlocks it remotely.
+		print(\"MelTech Level: Interactions configured.\")
 "
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_1"]

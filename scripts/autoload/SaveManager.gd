@@ -2,15 +2,35 @@
 extends Node
 
 const SAVE_PATH = "user://savegame.dat"
-const SAVE_VERSION = 2
+const SAVE_VERSION = 3
+
+var disable_saving: bool = false # For testing purposes
+
+func _ready() -> void:
+	# Connect to critical signals for auto-saving
+	EventBus.mission_completed.connect(func(_id): save_game())
+	EventBus.character_hired.connect(func(_char): save_game())
+	EventBus.inventory_changed.connect(save_game)
+	EventBus.wallet_changed.connect(func(_amount): save_game())
+
+func save_exists() -> bool:
+	return FileAccess.file_exists(SAVE_PATH)
 
 func save_game():
+	if disable_saving:
+		print("Save disabled during testing.")
+		return
+
 	var save_data = {
 		"version": SAVE_VERSION,
 		"player": {
 			"name": GameManager.player_name,
 			"reputation": GameManager.reputation,
 			"heat_levels": GameManager.heat_levels
+		},
+		"world": {
+			"time": TimeManager.serialize(),
+			"weather": WeatherManager.serialize()
 		},
 		"economy": {
 			"wallet": EconomyManager.wallet
@@ -24,6 +44,7 @@ func save_game():
 			"hired_character_paths": _get_hired_character_paths()
 		},
 		"story": StoryManager.serialize(),
+		"narrative": NarrativeManager.serialize(),
 		"mission_intel": _serialize_mission_intel()
 	}
 	
@@ -91,7 +112,13 @@ func _restore_game_state(save_data):
 		GameManager.reputation = p.get("reputation", 0)
 		GameManager.heat_levels = p.get("heat_levels", {"melnik": 0.0, "prague": 0.0})
 	
-	# 2. Economy
+	# 2. World State
+	if save_data.has("world"):
+		var w = save_data["world"]
+		if w.has("time"): TimeManager.deserialize(w["time"])
+		if w.has("weather"): WeatherManager.deserialize(w["weather"])
+	
+	# 3. Economy
 	if save_data.has("economy"):
 		EconomyManager.wallet = save_data["economy"].get("wallet", 1000)
 	
@@ -123,7 +150,11 @@ func _restore_game_state(save_data):
 	if save_data.has("story"):
 		StoryManager.deserialize(save_data["story"])
 	
-	# 7. Mission Intel
+	# 7. Narrative (Loop)
+	if save_data.has("narrative"):
+		NarrativeManager.deserialize(save_data["narrative"])
+	
+	# 8. Mission Intel
 	if save_data.has("mission_intel"):
 		var intel_map = save_data["mission_intel"]
 		for mission in MissionDB.missions:

@@ -1,5 +1,6 @@
 # Mission.gd
-class_name Mission extends Resource
+# class_name Mission 
+extends Resource
 
 @export var objectives: Array[String]
 @export var location_id: String

@@ -71,11 +71,12 @@ func show_call(event: StoryEvent):
 		caller_label.text = "Volá: " + event.character_name
 	visible = true
 	# Animace vysunutí (Tween) by byla zde
-	AudioManager.play_phone_ring()
+	AudioManager.start_phone_ring()
 
 func _on_accept_pressed():
 	visible = false
 	AudioManager.stop_phone_ring()
+	AudioManager.play_ui_sound("phone_pickup")
 	call_accepted.emit()
 	# Spustíme dialog přes EventBus
 	EventBus.request_start_dialogue.emit(current_event.character_name, current_event.dialogue_text, "", [], null)
@@ -83,6 +84,7 @@ func _on_accept_pressed():
 func _on_reject_pressed():
 	visible = false
 	AudioManager.stop_phone_ring()
+	AudioManager.play_ui_sound("phone_hangup")
 	call_rejected.emit()
 
 func _input(event):

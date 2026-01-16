@@ -6,12 +6,15 @@
 script = ExtResource("1_wbfu4")
 
 [node name="WorldHolder" type="Node2D" parent="."]
+position = Vector2(0, 150)
 
 [node name="PlanningHolder" type="Node2D" parent="."]
+position = Vector2(0, 150)
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="UILayer" type="CanvasLayer" parent="."]
+layer = 10
 
-[node name="UIHolder" type="Control" parent="CanvasLayer"]
+[node name="UIHolder" type="Control" parent="UILayer"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,3 +22,137 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="ShellLayer" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="GlobalUI" type="Control" parent="ShellLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TopStrip" type="PanelContainer" parent="ShellLayer/GlobalUI"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+theme_type_variation = &"StatusPanel"
+
+[node name="HBox" type="HBoxContainer" parent="ShellLayer/GlobalUI/TopStrip"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="ThoughtBubble" type="Panel" parent="ShellLayer/GlobalUI/TopStrip/HBox"]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+theme_type_variation = &"StatusPanel"
+
+[node name="Label" type="Label" parent="ShellLayer/GlobalUI/TopStrip/HBox/ThoughtBubble"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 16
+text = "Matt: \"...\""
+autowrap_mode = 2
+vertical_alignment = 1
+
+[node name="MainInfo" type="VBoxContainer" parent="ShellLayer/GlobalUI/TopStrip/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Title" type="Label" parent="ShellLayer/GlobalUI/TopStrip/HBox/MainInfo"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 1, 1)
+theme_override_font_sizes/font_size = 28
+text = "ZLODĚJ MĚLNÍK"
+horizontal_alignment = 1
+
+[node name="SubTitle" type="Label" parent="ShellLayer/GlobalUI/TopStrip/HBox/MainInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Iniciace systému..."
+horizontal_alignment = 1
+
+[node name="TimeWeather" type="VBoxContainer" parent="ShellLayer/GlobalUI/TopStrip/HBox"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="TimeLabel" type="Label" parent="ShellLayer/GlobalUI/TopStrip/HBox/TimeWeather"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0, 1)
+text = "00:00"
+horizontal_alignment = 2
+
+[node name="WeatherLabel" type="Label" parent="ShellLayer/GlobalUI/TopStrip/HBox/TimeWeather"]
+layout_mode = 2
+text = "JASNO"
+horizontal_alignment = 2
+
+[node name="BottomStrip" type="PanelContainer" parent="ShellLayer/GlobalUI"]
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_type_variation = &"StatusPanel"
+
+[node name="HBox" type="HBoxContainer" parent="ShellLayer/GlobalUI/BottomStrip"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="ObjectivePanel" type="VBoxContainer" parent="ShellLayer/GlobalUI/BottomStrip/HBox"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="Header" type="Label" parent="ShellLayer/GlobalUI/BottomStrip/HBox/ObjectivePanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.7, 0, 1)
+text = "AKTUÁLNÍ ÚKOL"
+
+[node name="ObjectiveText" type="Label" parent="ShellLayer/GlobalUI/BottomStrip/HBox/ObjectivePanel"]
+layout_mode = 2
+text = "Najdi Honzu v hospodě U Černého Orla."
+autowrap_mode = 2
+
+[node name="TeamStatus" type="VBoxContainer" parent="ShellLayer/GlobalUI/BottomStrip/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Header" type="Label" parent="ShellLayer/GlobalUI/BottomStrip/HBox/TeamStatus"]
+layout_mode = 2
+text = "STAV TÝMU"
+
+[node name="TeamList" type="HBoxContainer" parent="ShellLayer/GlobalUI/BottomStrip/HBox/TeamStatus"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="WalletPanel" type="VBoxContainer" parent="ShellLayer/GlobalUI/BottomStrip/HBox"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="WalletLabel" type="Label" parent="ShellLayer/GlobalUI/BottomStrip/HBox/WalletPanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0.5, 1)
+theme_override_font_sizes/font_size = 24
+text = "10 000 Kč"
+horizontal_alignment = 2

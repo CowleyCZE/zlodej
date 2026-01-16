@@ -21,4 +21,3 @@ class_name InventoryItem extends Resource
 @export var effect_radius: float = 0.0 # Meters/Units
 @export var effect_duration: float = 0.0 # Seconds
 @export var is_lethal: bool = false
-

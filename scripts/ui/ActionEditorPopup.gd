@@ -6,9 +6,9 @@ signal action_deleted(action_index: int)
 
 var current_char: CharacterData
 var current_action_index: int
-var current_action: PlanningData.TimelineAction
+var current_action: Resource # Using generic Resource to avoid strict inner class parse issues during load
 
-# UI References (created in code for MVP if scene doesn't exist, or expected nodes)
+# UI References
 var vbox: VBoxContainer
 var lbl_info: Label
 var opt_tools: OptionButton
@@ -20,11 +20,10 @@ var btn_delete: Button
 func _ready() -> void:
 	title = "Upravit Akci"
 	initial_position = Window.WINDOW_INITIAL_POSITION_CENTER_MAIN_WINDOW_SCREEN
-	size = Vector2(300, 250)
+	size = Vector2(300, 280)
 	exclusive = true
 	visible = false
 	
-	# Create UI programmatically to avoid dependency on .tscn for now
 	var margin = MarginContainer.new()
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 10)
 	add_child(margin)
@@ -35,16 +34,25 @@ func _ready() -> void:
 	lbl_info = Label.new()
 	vbox.add_child(lbl_info)
 	
-	vbox.add_child(Label.new().with_text("Nástroj:"))
+	var lbl_tool = Label.new()
+	lbl_tool.text = "Nástroj:"
+	vbox.add_child(lbl_tool)
+	
 	opt_tools = OptionButton.new()
 	vbox.add_child(opt_tools)
 	
-	vbox.add_child(Label.new().with_text("Čekat na signál:"))
+	var lbl_wait = Label.new()
+	lbl_wait.text = "Čekat na signál:"
+	vbox.add_child(lbl_wait)
+	
 	txt_wait_signal = LineEdit.new()
 	txt_wait_signal.placeholder_text = "např. alarm_disabled"
 	vbox.add_child(txt_wait_signal)
 	
-	vbox.add_child(Label.new().with_text("Vyslat signál po dokončení:"))
+	var lbl_emit = Label.new()
+	lbl_emit.text = "Vyslat signál po dokončení:"
+	vbox.add_child(lbl_emit)
+	
 	txt_emit_signal = LineEdit.new()
 	txt_emit_signal.placeholder_text = "např. door_open"
 	vbox.add_child(txt_emit_signal)
@@ -69,18 +77,13 @@ func _ready() -> void:
 	
 	close_requested.connect(hide)
 
-# Helper extension for Label
-func with_text(t: String) -> Label:
-	self.text = t
-	return self
-
-func open(char_data: CharacterData, action_index: int, action: PlanningData.TimelineAction):
+func open(char_data: CharacterData, action_index: int, action: Resource):
 	current_char = char_data
 	current_action_index = action_index
 	current_action = action
 	
 	# Populate fields
-	lbl_info.text = "%s - %.1fs" % [action.type, action.time]
+	lbl_info.text = "%s - %.1fs" % [action.get("type"), action.get("time")]
 	
 	# Tools
 	opt_tools.clear()
@@ -89,22 +92,19 @@ func open(char_data: CharacterData, action_index: int, action: PlanningData.Time
 	
 	var idx = 1
 	for item_id in char_data.inventory:
-		# Need lookup for item name, simplified here:
 		opt_tools.add_item(item_id, idx)
 		opt_tools.set_item_metadata(idx, item_id)
-		if item_id == action.selected_tool_id:
+		if item_id == action.get("selected_tool_id"):
 			opt_tools.selected = idx
 		idx += 1
 		
-	txt_wait_signal.text = action.wait_for_signal
-	txt_emit_signal.text = action.emit_signal_on_complete
+	txt_wait_signal.text = action.get("wait_for_signal")
+	txt_emit_signal.text = action.get("emit_signal_on_complete")
 	
 	popup()
 
 func _on_save_pressed():
 	var changes = {}
-	
-	# Tool
 	if opt_tools.selected > -1:
 		changes["tool_id"] = opt_tools.get_selected_metadata()
 	else:

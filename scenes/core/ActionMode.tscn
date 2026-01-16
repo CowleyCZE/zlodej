@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://action_mode_v3"]
+[gd_scene load_steps=2 format=3 uid="uid://dkkhbf7y08prw"]
 
-[ext_resource type="Script" path="res://scripts/core/ActionMode.gd" id="1_act"]
+[ext_resource type="Script" uid="uid://iut05eg6er7k" path="res://scripts/core/ActionMode.gd" id="1_act"]
 
 [node name="ActionMode" type="Node2D"]
 script = ExtResource("1_act")

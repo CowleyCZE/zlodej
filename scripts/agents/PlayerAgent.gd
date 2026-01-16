@@ -68,13 +68,25 @@ func _process_noise_emission(delta: float):
 		# Determine radius based on speed
 		var speed_val = velocity.length()
 		var radius = 100.0 # Default Walk
+		var step_style = "walk"
+		var current_surface = "concrete" # TODO: Detect surface via RayCast or Area
 		
 		if speed_val > speed * 1.5: # Running
 			radius = 250.0
+			step_style = "run"
+			noise_tick_timer = NOISE_TICK_RATE * 0.7 # Faster steps
 		elif speed_val < speed * 0.6: # Sneaking
 			radius = 35.0
+			step_style = "sneak"
+			noise_tick_timer = NOISE_TICK_RATE * 1.3 # Slower steps
 			
 		NoiseSystem.emit_noise(global_position, radius)
+		
+		# Play audio only for manual player or if needed for ghosts (usually ghosts are silent to player unless emphasized)
+		if current_mode == Mode.MANUAL or (current_mode == Mode.PLAYBACK and visible):
+			# Pokud jsme v interiéru, změníme surface (jednoduchý hack, později Area detekce)
+			# if GameManager.is_interior: current_surface = "wood"
+			AudioManager.play_footstep(current_surface, step_style)
 
 func _process_manual_input() -> void:
 	if _can_move_manually():

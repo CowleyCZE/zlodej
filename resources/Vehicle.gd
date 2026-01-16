@@ -1,6 +1,6 @@
 # res://resources/Vehicle.gd
 extends Resource
-class_name Vehicle
+# class_name Vehicle
 
 @export var model_name: String
 @export var top_speed: float

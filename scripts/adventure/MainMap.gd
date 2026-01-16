@@ -19,6 +19,9 @@ func _ready() -> void:
 	
 	# Listen to global events
 	EventBus.character_hired.connect(func(_char): _update_hud())
+	
+	# Start City Ambience
+	AudioManager.start_ambient("amb_city_night")
 
 func _update_hud() -> void:
 	money_label.text = "Finance: %d CZK" % EconomyManager.wallet
@@ -26,6 +29,7 @@ func _update_hud() -> void:
 
 func _on_pub_pressed() -> void:
 	print("Vstup do Hospody U Orla...")
+	AudioManager.start_ambient("amb_pub")
 	# TODO: Open Recruitment UI
 	
 func _on_cafe_pressed() -> void:
@@ -34,9 +38,11 @@ func _on_cafe_pressed() -> void:
 
 func _on_hotel_pressed() -> void:
 	print("Návrat na hotel...")
+	AudioManager.start_ambient("amb_city_night") # Návrat k městu
 
 func _on_start_mission_pressed() -> void:
 	print("Startuji Tutorial Misi...")
+	AudioManager.stop_ambient()
 	# Load mission data
 	var mission = load("res://resources/Missions/Mission_Tutorial.tres")
 	if mission:

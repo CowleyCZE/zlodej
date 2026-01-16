@@ -1,3 +1,64 @@
-[gd_resource type="Resource" load_steps=0 format=3 uid="uid://cytgj0ke5xj1t"]
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://cytgj0ke5xj1t"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Button_Hover"]
+bg_color = Color(0.0431373, 0.101961, 0.164706, 0.95)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0, 1, 1, 1)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Button_Normal"]
+bg_color = Color(0.0431373, 0.101961, 0.164706, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.223529, 0.627451, 0.929412, 1)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Button_Pressed"]
+bg_color = Color(0.223529, 0.627451, 0.929412, 0.4)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0, 1, 1, 1)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Panel_Main"]
+bg_color = Color(0.0431373, 0.101961, 0.164706, 0.85)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.223529, 0.627451, 0.929412, 1)
+corner_detail = 1
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_StatusStrip"]
+bg_color = Color(0.0431373, 0.101961, 0.164706, 1)
+border_width_bottom = 3
+border_color = Color(0.223529, 0.627451, 0.929412, 1)
+corner_detail = 1
 
 [resource]
+default_font_size = 16
+Button/colors/font_color = Color(0.223529, 0.627451, 0.929412, 1)
+Button/colors/font_hover_color = Color(0, 1, 1, 1)
+Button/colors/font_pressed_color = Color(1, 1, 1, 1)
+Button/styles/hover = SubResource("StyleBoxFlat_Button_Hover")
+Button/styles/normal = SubResource("StyleBoxFlat_Button_Normal")
+Button/styles/pressed = SubResource("StyleBoxFlat_Button_Pressed")
+Label/colors/font_color = Color(0.223529, 0.627451, 0.929412, 1)
+Label/colors/font_outline_color = Color(0, 0, 0, 1)
+Label/colors/font_shadow_color = Color(0, 0, 0, 0.5)
+Label/constants/outline_size = 4
+Label/constants/shadow_offset_x = 2
+Label/constants/shadow_offset_y = 2
+Panel/styles/panel = SubResource("StyleBoxFlat_Panel_Main")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_Panel_Main")
+StatusPanel/base_type = &"PanelContainer"
+StatusPanel/styles/panel = SubResource("StyleBoxFlat_StatusStrip")

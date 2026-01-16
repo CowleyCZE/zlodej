@@ -48,7 +48,11 @@ func _calculate_and_apply_results():
 	# Apply to economy
 	EconomyManager.wallet += net_profit
 	
-	# 3. Rank Evaluation
+	# 3. Apply XP to Team (Point 7)
+	for member in results["team_members"]:
+		member.gain_experience(2) # 2 skill points per mission
+	
+	# 4. Rank Evaluation
 	var rank = "PROFESIONÁL"
 	var rank_color = Color.CYAN
 	

@@ -36,6 +36,8 @@ func _process(_delta):
 		lock_rotation = lerp(lock_rotation, 0.0, 0.1)
 		lock_visual.rotation_degrees = lock_rotation
 
+var sound_cooldown: float = 0.0
+
 func attempt_turn():
 	# Calculate how close we are to the sweet spot (using top-centered coordinates)
 	# Target is actually between -90 and 90 relative to the top
@@ -48,6 +50,14 @@ func attempt_turn():
 	else:
 		# Can only turn partially depending on distance
 		max_turn = clamp(90.0 - (distance * 2.0), 0.0, 45.0)
+		
+		# Sound effect for fumbling
+		if sound_cooldown <= 0.0 and lock_rotation > 5.0:
+			AudioManager.play_tool_sfx("lockpick_fumble")
+			sound_cooldown = 0.3 # Don't spam sound
+	
+	if sound_cooldown > 0.0:
+		sound_cooldown -= get_process_delta_time()
 	
 	lock_rotation = move_toward(lock_rotation, max_turn, 2.0)
 	lock_visual.rotation_degrees = lock_rotation
@@ -56,6 +66,7 @@ func attempt_turn():
 		success()
 
 func success():
+	AudioManager.play_tool_sfx("lockpick_success")
 	set_process(false)
 	$StatusLabel.text = "ODEMČENO!"
 	$StatusLabel.modulate = Color.GREEN

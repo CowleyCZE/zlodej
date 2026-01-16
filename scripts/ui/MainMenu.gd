@@ -25,8 +25,8 @@ func _on_new_game_pressed():
 	get_tree().change_scene_to_file("res://scenes/ui/NameSelection.tscn")
 
 func _on_continue_pressed():
-	# EventBus.request_continue_game.emit() # Future
-	pass
+	SaveManager.load_game()
+	EventBus.request_start_game.emit()
 
 func _on_quit_pressed():
 	EventBus.request_quit_game.emit()

@@ -1,9 +1,44 @@
 extends Node
 
+@onready var thought_label: Label = $ShellLayer/GlobalUI/TopStrip/HBox/ThoughtBubble/Label
+@onready var title_label: Label = $ShellLayer/GlobalUI/TopStrip/HBox/MainInfo/Title
+@onready var subtitle_label: Label = $ShellLayer/GlobalUI/TopStrip/HBox/MainInfo/SubTitle
+@onready var time_label: Label = $ShellLayer/GlobalUI/TopStrip/HBox/TimeWeather/TimeLabel
+@onready var weather_label: Label = $ShellLayer/GlobalUI/TopStrip/HBox/TimeWeather/WeatherLabel
+
+# Bottom Strip UI References
+@onready var objective_label: Label = $ShellLayer/GlobalUI/BottomStrip/HBox/ObjectivePanel/ObjectiveText
+@onready var wallet_label: Label = $ShellLayer/GlobalUI/BottomStrip/HBox/WalletPanel/WalletLabel
+@onready var team_list: HBoxContainer = $ShellLayer/GlobalUI/BottomStrip/HBox/TeamStatus/TeamList
+
 func _ready():
 	print("Game.gd: _ready called")
 	
-	# Add internal systems
+	# Connect Narrative/UI signals
+	if MattManager:
+		MattManager.thought_emitted.connect(func(t): 
+			thought_label.text = t
+			print("UI: Received thought: ", t)
+		)
+		MattManager.emit_thought("Zase jsem tady. Mělník. Jako by se nic nezměnilo.")
+	
+	if TimeManager:
+		TimeManager.time_changed.connect(_on_time_changed)
+		_on_time_changed(TimeManager.current_slot)
+		
+	if WeatherManager:
+		WeatherManager.weather_changed.connect(_on_weather_changed)
+		_on_weather_changed(WeatherManager.current_weather)
+
+	# Global Data Connections
+	EventBus.wallet_changed.connect(_update_wallet)
+	_update_wallet(EconomyManager.wallet)
+	
+	if has_node("/root/AdventureManager"):
+		get_node("/root/AdventureManager").character_hired.connect(func(_c): _update_team_display())
+	_update_team_display()
+
+	# ... (existing internal systems setup)
 	var heat_system = Node.new()
 	heat_system.name = "HeatSystem"
 	heat_system.set_script(load("res://scripts/systems/HeatSystem.gd"))
@@ -13,13 +48,13 @@ func _ready():
 	var dialogue_packed = load("res://scenes/ui/DialogueSystem.tscn")
 	if dialogue_packed:
 		var dialogue = dialogue_packed.instantiate()
-		$CanvasLayer.add_child(dialogue)
+		$UILayer/UIHolder.add_child(dialogue) # Put dialogue in UI Layer
 		
 	# Add Phone UI for Story Events
 	var phone_packed = load("res://scenes/ui/PhoneUI.tscn")
 	if phone_packed:
 		var phone_ui = phone_packed.instantiate()
-		$CanvasLayer.add_child(phone_ui)
+		$UILayer/UIHolder.add_child(phone_ui)
 		if has_node("/root/StoryManager"):
 			get_node("/root/StoryManager").register_phone_ui(phone_ui)
 	
@@ -41,6 +76,44 @@ func _ready():
 	# Start in current state (persisted in GameManager)
 	set_state(GameManager.current_state)
 
+func _update_wallet(amount: int):
+	wallet_label.text = str(amount) + " Kč"
+	# Small animation
+	var tween = create_tween()
+	wallet_label.modulate = Color.GREEN
+	tween.tween_property(wallet_label, "modulate", Color.WHITE, 0.5)
+
+func _update_team_display():
+	for child in team_list.get_children(): child.queue_free()
+	
+	var hired = []
+	if has_node("/root/AdventureManager"):
+		hired = get_node("/root/AdventureManager").hired_characters
+		
+	if hired.is_empty():
+		var lbl = Label.new()
+		lbl.text = "Sám na sebe."
+		lbl.modulate = Color.GRAY
+		team_list.add_child(lbl)
+	else:
+		for member in hired:
+			var panel = Panel.new()
+			panel.custom_minimum_size = Vector2(60, 60)
+			# Placeholder for member icon
+			var lbl = Label.new()
+			lbl.text = member.name.left(1).to_upper()
+			lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			lbl.set_anchors_preset(Control.PRESET_FULL_RECT)
+			panel.add_child(lbl)
+			team_list.add_child(panel)
+
+func _on_time_changed(_slot):
+	time_label.text = TimeManager.get_time_string()
+	
+func _on_weather_changed(_weather):
+	weather_label.text = WeatherManager.get_weather_string()
+
 func _on_inventory_requested():
 	_show_ui_popup("res://scenes/ui/InventoryUI.tscn")
 
@@ -52,7 +125,7 @@ func _on_shop_requested():
 
 func _show_ui_popup(scene_path: String):
 	# Don't open if already open
-	for child in $CanvasLayer/UIHolder.get_children():
+	for child in $UILayer/UIHolder.get_children():
 		if child.scene_file_path == scene_path:
 			child.queue_free()
 			return
@@ -60,7 +133,7 @@ func _show_ui_popup(scene_path: String):
 	var packed = load(scene_path)
 	if packed:
 		var popup = packed.instantiate()
-		$CanvasLayer/UIHolder.add_child(popup)
+		$UILayer/UIHolder.add_child(popup)
 
 func _on_game_manager_state_changed(new_state: GameManager.State):
 	set_state(new_state)
@@ -73,7 +146,7 @@ func _on_action_phase_started(plan: PlanningData):
 	# Clear containers
 	for child in $WorldHolder.get_children(): child.queue_free()
 	for child in $PlanningHolder.get_children(): child.queue_free()
-	for child in $CanvasLayer/UIHolder.get_children(): child.queue_free()
+	for child in $UILayer/UIHolder.get_children(): child.queue_free()
 	
 	# Load Action Mode
 	var action_packed = load("res://scenes/core/ActionMode.tscn")
@@ -94,12 +167,12 @@ func _show_minigame(scene_path: String, difficulty: float, callback: Callable):
 	var packed = load(scene_path)
 	if packed:
 		var minigame = packed.instantiate()
-		$CanvasLayer/UIHolder.add_child(minigame)
+		$UILayer/UIHolder.add_child(minigame)
 		if minigame.has_method("setup"):
 			minigame.setup(difficulty, callback)
 
 func close_current_ui():
-	for child in $CanvasLayer/UIHolder.get_children():
+	for child in $UILayer/UIHolder.get_children():
 		child.queue_free()
 
 func _on_start_game_requested():
@@ -116,22 +189,34 @@ func set_state(new_state):
 	# Clear containers
 	for child in $WorldHolder.get_children(): child.queue_free()
 	for child in $PlanningHolder.get_children(): child.queue_free()
-	for child in $CanvasLayer/UIHolder.get_children(): child.queue_free()
+	for child in $UILayer/UIHolder.get_children(): child.queue_free()
 
 	match GameManager.current_state:
 		GameManager.State.MENU:
 			var menu_packed = load("res://scenes/ui/MainMenu.tscn")
 			if menu_packed:
-				$CanvasLayer/UIHolder.add_child(menu_packed.instantiate())
+				$UILayer/UIHolder.add_child(menu_packed.instantiate())
 			
 		GameManager.State.ADVENTURE:
 			print("Game.gd: Loading AdventureMode (Container)...")
+			title_label.text = "ULICE MĚLNÍKA"
+			subtitle_label.text = "Hledání kontaktů a tipů"
 			var adv_packed = load("res://scenes/core/AdventureMode.tscn")
 			if adv_packed:
 				$WorldHolder.add_child(adv_packed.instantiate())
 				
+		GameManager.State.HIDEOUT:
+			print("Game.gd: Loading HideoutMode (Hotel)...")
+			title_label.text = "HOTEL AUGUSTINE"
+			subtitle_label.text = "Bezpečné místo pro plánování"
+			var hide_packed = load("res://scenes/core/HideoutMode.tscn")
+			if hide_packed:
+				$WorldHolder.add_child(hide_packed.instantiate())
+				
 		GameManager.State.PLANNING:
 			print("Game.gd: Loading PlanningMode (Heist Editor)...")
+			title_label.text = "TAKTICKÝ PLÁN"
+			subtitle_label.text = "Synchronizace týmu"
 			var plan_packed = load("res://scenes/core/PlanningMode.tscn")
 			if plan_packed:
 				$PlanningHolder.add_child(plan_packed.instantiate())
@@ -147,7 +232,7 @@ func set_state(new_state):
 			print("Game.gd: Loading ResultScreen...")
 			var results_packed = load("res://scenes/ui/ResultScreen.tscn")
 			if results_packed:
-				$CanvasLayer/UIHolder.add_child(results_packed.instantiate())
+				$UILayer/UIHolder.add_child(results_packed.instantiate())
 	
 	EventBus.game_state_changed.emit(new_state)
 

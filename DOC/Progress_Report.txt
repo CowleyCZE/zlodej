@@ -2,6 +2,12 @@ PROJEKT: ZLODĚJ MĚLNÍK - AKTUALIZACE POSTUPU
 ==============================================
 Poslední aktualizace: 15. ledna 2026 (Konec směny)
 
+24. AUDIO INTEGRACE A STABILIZACE CORE SYSTÉMŮ (15. ledna 2026 - Večer):
+    *   **AUDIO:** Plná integrace 18 SFX a ambientů (OGG). AudioManager nyní podporuje lazy-loading a obsahuje knihovnu SFX_LIBRARY.
+    *   **FIX:** Opraven EconomyManager (přidány metody add_money/spend_money) a GhostRunController (přidána metoda record_frame).
+    *   **FIX:** Opraven spawning postav v LocationView.gd - nyní plně využívá systém rozvrhů (schedule) podle denní doby.
+    *   **TEST:** Vytvořen FullSystemTest.gd pro automatické ověření systémů a AudioTest.tscn pro manuální playtest zvuků.
+
 23. BUGFIXING A OPTIMALIZACE (15. ledna 2026 - Odpoledne):
     *   **FIX:** Opravena kritická chyba v `PhoneUI.gd` (pád na `@onready` při dynamické instanciaci). Skript nyní bezpečně vytváří UI prvky, pokud ve scéně chybí.
     *   **FIX:** Doplněna chybějící metoda `stop_phone_ring` v `AudioManager.gd`.
@@ -16,10 +22,89 @@ Poslední aktualizace: 15. ledna 2026 (Konec směny)
 
 STAV PROJEKTU:
 *   Stabilní build (v4.5.1).
-*   Funkční smyčka: Start -> Adventure -> Story Call (Tutorial) -> Mission Unlock.
-*   Základy pro dynamické chování NPC jsou položeny.
+*   Funkční smyčka: Start -> Adventure -> Story Call -> Mission Unlock.
+*   Audio: Kompletně integrováno a otestováno.
+*   Ekonomika a Ghost Run: Opraveny kritické API chyby.
 
-DALŠÍ KROKY (Backlog):
-*   **Audio (SFX):** Vygenerovat a integrovat zvuky dle `DOC/Audio_Generation_Prompts.md`.
-*   **Vizuální Polish:** Přidání částicových efektů pro déšť a mlhu v Adventure Mode (dle Art Bible).
-*   **Planning Editor:** Rozšířit nástroje pro editaci trasy (přidat "Wait" node vizuálně).
+25. ROZŠÍŘENÍ PLANNING EDITORU A VIZUALIZACE (15. ledna 2026 - Pozdě večer):
+    *   **VISUAL:** GhostPathVisualizer nyní vykresluje body čekání (žluté kruhy) a interakcí (cyan čtverce) přímo na blueprint mapu pro lepší přehled o timingu.
+    *   **UI:** Přidáno tlačítko "⏳ ČEKAT" do RecordingHUD, umožňující vkládat synchronizační body na časovou osu.
+    *   **LOGIC:** Implementovány chybějící metody v PlanningManageru pro editaci, mazání a synchronizaci akcí (WAIT FOR SIGNAL).
+    *   **TEST:** Ověřena integrace mezi PlanningManagerem a UI komponentami (TimelinePanel, RecordingHUD).
+
+26. IMPLEMENTACE INTERAKCÍ MISE MELTECH (16. ledna 2026 - Ráno):
+    *   **HACKING:** Plně zprovozněna minihra `Minigame_Hacking` (Cyberpunk grid puzzle).
+    *   **INTERAKCE:** `HackingTerminal` nyní podporuje dálkové odemykání dveří (Remote Unlock).
+    *   **LEVEL LOGIC:** V `Level_MelTech` nastaveno propojení mezi bezpečnostním terminálem a dveřmi do serverovny.
+    *   **SYSTEMS:** Rozšířen `EventBus` o signál `request_remote_unlock` a implementován v `Door.gd`.
+
+27. VIZUÁLNÍ POLISH A ATMOSFÉRA (16. ledna 2026 - Dopoledne):
+    *   **WEATHER:** Implementován `WeatherController`, který dynamicky generuje částicové efekty pro déšť a mlhu v Adventure módu.
+    *   **MOOD:** Přidán `CanvasModulate` (resp. ColorRect Overlay) pro simulaci denní doby a atmosféry (ztmavnutí v noci, modrý nádech při dešti).
+    *   **TECH:** Částice jsou generovány procedurálně (GDScript), což eliminuje potřebu externích textur a zjednodušuje správu assetů.
+    *   **INTEGRACE:** WeatherController vložen do `AdventureMode.tscn` a napojen na `WeatherManager`.
+
+28. VYLADĚNÍ TUTORIÁLU (16. ledna 2026 - Poledne):
+    *   **SCRIPTING:** `Level_Tutorial` rozšířen o interaktivního průvodce (Step-by-Step logika), který reaguje na hráčův postup (Pohyb -> Dveře -> Hack -> Útěk).
+    *   **DIALOG:** Využit `EventBus.request_start_dialogue` pro zobrazení instrukcí od NPC "Honza".
+    *   **BALANCE:** Výrazně snížena obtížnost stráže v tutoriálu (nižší rychlost, užší zorný úhel), aby měl nový hráč čas na reakci.
+
+29. INTEGRAČNÍ TESTOVÁNÍ (16. ledna 2026 - Odpoledne):
+    *   **QA:** Aktualizován `scripts/tests/FullSystemTest.gd` o testy pro nové systémy (Weather, MelTech Interactions, Tutorial Logic).
+    *   **COVERAGE:** Testovací sada nyní ověřuje integritu audia, ekonomiky, event busu a specifické logiky levelů bez nutnosti manuálního hraní.
+    *   **STATUS:** Projekt je připraven pro "Alpha Release" kandidáta.
+
+30. STABILIZACE SAVE SYSTÉMU A MAIN MENU (16. ledna 2026 - Odpoledne):
+    *   **SAVE:** Rozšířen `SaveManager` o ukládání stavu světa (čas, počasí) a migraci verzí.
+    *   **AUTO-SAVE:** Propojeno automatické ukládání na herní události (mise, nákupy, najímání).
+    *   **UI:** Zprovozněno tlačítko "Pokračovat" v hlavním menu, které korektně obnovuje stav hry z disku.
+    *   **ALPHA:** Projekt povýšen na verzi 0.5.0-alpha.
+
+31. OPTIMALIZACE VÝKONU A QUALITY TIERS (16. ledna 2026 - Odpoledne):
+    *   **PERF:** Implementován robustní `PerformanceManager` s podporou úrovní kvality (LOW, MEDIUM, HIGH).
+    *   **ADAPTIVITA:** Systém počasí nyní automaticky škáluje počet částic (v LOW kvalitě jsou částice vypnuty).
+    *   **SHADERS:** Náročné UI shadery se v nízké kvalitě automaticky deaktivují.
+
+32. MAP REVEAL A INTEL FOG (16. ledna 2026 - Odpoledne):
+    *   **VISUAL:** Implementován systém Fog of War pro Planning Mode. Pokud hráč nenasbírá "Intel" o architektuře, blueprint budovy je skryt za shaderovým šumem.
+    *   **LOGIC:** Stráže, kamery a loot se v plánování zobrazují pouze tehdy, pokud má hráč odpovídající Intel flagy (`patrols`, `security`, `treasure`).
+    *   **SHADER:** Upraven `blueprint_overlay.gdshader` o parametr `reveal_intensity` a procedurální šum.
+
+33. POLISH PLÁNOVACÍHO MÓDU (16. ledna 2026 - Odpoledne):
+    *   **INTERPOLACE:** Implementována lineární interpolace pozic v `PlanningData.gd`. Pohyb duchů (ghosts) je nyní plynulý bez ohledu na hustotu nahrávky.
+    *   **VALIDACE:** Přidán systém automatické kontroly plánu v `PlanningManager.gd`. Systém detekuje kolize (přílišnou blízkost) agentů v čase a emituje signál `plan_validated`.
+    *   **ALIGNMENT:** Projekt nyní plně odpovídá technické specifikaci TDD 1.2 ohledně validace plánu.
+
+34. VIZUÁLNÍ VALIDACE KOLIZÍ (16. ledna 2026 - Odpoledne):
+    *   **VISUAL:** GhostPathVisualizer nyní vykresluje červené výstražné křížky na místech, kde dochází ke kolizi agentů v čase.
+    *   **FEEDBACK:** Hráč okamžitě vidí problematické body plánu přímo na blueprintu bez nutnosti spouštět simulaci.
+    *   **UX:** Přidán jemný "glow" efekt pod značky chyb pro zvýšení čitelnosti.
+
+35. NARRATIVE A LOOP SYSTÉM (16. ledna 2026 - Pozdě odpoledne):
+    *   **LORE:** Integrována data z `Narrative_Melnik_2025.md`. Hra nyní obsahuje koncept časové smyčky (loop) resetující se v 03:33.
+    *   **BARKS:** Strážní nyní používají lokalizované hlášky (bubliny nad hlavou) reflektující jejich stav.
+    *   **LOCALIZATION:** Zaveden centrální lokalizační systém (`localization.csv`).
+
+36. UI DESIGN GUIDELINES COMPLIANCE (16. ledna 2026 - Večer):
+    *   **PALETTE:** Celý projekt sjednocen pod Master Paletu (Deep Blue, Tech Blue, Agent Cyan).
+    *   **POLISH:** Implementována skeuomorfní vizuální odezva pro interaktivní objekty.
+
+37. SOUNDSCAPE A NARRATIVNÍ AUDIO (16. ledna 2026 - Pozdě večer):
+    *   **BLUEPRINT:** Implementován `PlanningSoundscape`, který dodává režimu plánování technický ambient a systémové pípání.
+    *   **LOOP RESET:** Propojen reset časové smyčky se zvukovou sekvencí (siréna + glitch).
+
+38. VISUAL POLISH - LOOP GLITCH (16. ledna 2026 - Noc):
+    *   **SHADER:** Vytvořen `screen_glitch.gdshader`.
+    *   **MANAGER:** Přidán globální `VFXManager`.
+
+39. FINÁLNÍ INTEGRACE LOOPU (16. ledna 2026 - Noc):
+    *   **FLOW:** Dokončen narativní přechod: Hospoda (Info) -> Hotel (Příprava) -> Blueprint (Plánování) -> Akce.
+    *   **HIDEOUT:** Implementována scéna hotelového pokoje jako bezpečné útočiště pro aktivaci plánovacího režimu.
+    *   **UI SHELL:** Globální třípásmový layout s Mattovými myšlenkami je nyní permanentní součástí herního zážitku.
+    *   **QA:** Všechny kritické chyby (shadery, identifikátory, argumenty) opraveny. Projekt je stabilní.
+
+STAV: ALPHA 0.5.0 READY PRO EXPORT.
+
+DALŠÍ KROKY:
+*   Export APK 0.5.0-alpha.
+*   Playtest s komunitou.

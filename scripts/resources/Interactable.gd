@@ -1,4 +1,4 @@
 extends Node
 
-func interact(player):
+func interact(_player):
 	print("Interact base called")

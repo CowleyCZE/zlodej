@@ -61,7 +61,37 @@ func add_item(item_id: String) -> void:
 	inventory.append(item_id)
 
 func remove_item(item_id: String) -> bool:
+
 	if has_item(item_id):
+
 		inventory.erase(item_id)
+
 		return true
+
 	return false
+
+
+
+func gain_experience(amount: int = 1):
+
+	print("CHARACTER: ", name, " gained experience!")
+
+	# Improve random skills (0-100 limit)
+
+	var skills = ["driving", "lock_picking", "electronics", "stealth", "strength"]
+
+	for i in range(amount):
+
+		var target = skills.pick_random()
+
+		var current_val = get(target)
+
+		if current_val < 100:
+
+			set(target, current_val + randi_range(1, 3))
+
+			print("  - Skill improved: ", target, " to ", get(target))
+
+	
+
+	satisfaction = clamp(satisfaction + 5.0, 0.0, 100.0)

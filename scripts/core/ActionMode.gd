@@ -79,11 +79,17 @@ func setup_execution(plan: PlanningData) -> void:
 	current_plan = plan
 	execution_time = 0.0
 	is_executing = true
-	hud_status_label.text = "EXECUTING: " + plan.mission_id
+	hud_status_label.text = "EXECUTING: " + (plan.mission_id if plan.mission_id != "" else "HEIST")
 	
-	# Load recorded tracks into controller
+	# Load recorded tracks from metadata (Sourced from PlanningManager)
 	if plan.has_meta("recorded_tracks"):
 		ghost_controller.recorded_tracks = plan.get_meta("recorded_tracks")
+		print("Action Mode: Loaded ", ghost_controller.recorded_tracks.size(), " character tracks.")
+	else:
+		push_error("Action Mode: No recorded tracks found in plan metadata!")
+	
+	# Recalculate delays based on the plan's actions
+	ghost_controller.set_plan(plan)
 	
 	# Load Level
 	var level_path = "res://scenes/levels/Level_Tutorial.tscn" # Fallback
@@ -138,11 +144,24 @@ func _physics_process(delta: float) -> void:
 	hud_time_label.text = "T+ %.2f s" % execution_time
 	
 	# Update all agents
+	var longest_track = 0.0
 	for agent_name in agents:
 		var state = ghost_controller.get_state_at_time(agent_name, execution_time)
 		agents[agent_name].apply_state(state)
+		
+		# Find the duration of this character's track
+		if ghost_controller.recorded_tracks.has(agent_name):
+			var track = ghost_controller.recorded_tracks[agent_name]
+			if not track.is_empty():
+				longest_track = max(longest_track, track.back()["time"])
 	
-	if execution_time >= 600.0: # Max duration
+	# Auto-finish if we surpassed the longest track + buffer
+	if execution_time > longest_track + 2.0 and execution_time > 5.0:
+		print("Action Mode: All tracks finished. Finalizing mission.")
+		is_executing = false
+		_on_mission_completed(current_plan.mission_id if current_plan else "unknown")
+	
+	if execution_time >= 600.0: # Hard limit 10m
 		is_executing = false
 		print("Execution finished.")
 

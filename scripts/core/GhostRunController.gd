@@ -23,11 +23,23 @@ var ghost_nodes: Dictionary = {} # {"petra": Node2D_instance, ...}
 func _physics_process(delta: float):
 	if is_recording:
 		current_time += delta
-		_record_frame()
+		# _record_frame() # Nyní voláno z PlayerAgent.gd přímo přes record_frame()
 		_replay_ghosts()
 		time_updated.emit(current_time)
 
 # --- Veřejné metody pro ovládání z MainScene ---
+
+func record_frame(pos: Vector2, vel: Vector2, actions: Dictionary = {}):
+	if not is_recording:
+		return
+		
+	var frame_data = {
+		"time": current_time,
+		"pos": pos,
+		"vel": vel,
+		"actions": actions
+	}
+	active_track.append(frame_data)
 
 func start_recording(char_id: String):
 	if is_recording:

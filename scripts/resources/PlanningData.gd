@@ -38,13 +38,30 @@ class CharacterPlan:
 	var waypoints: Array[TimelineWaypoint] = []
 	var actions: Array[TimelineAction] = []
 	
-	func get_position_at_time(_time: float) -> Vector2:
-		# Basic linear interpolation logic placeholder
+	func get_position_at_time(time: float) -> Vector2:
 		if waypoints.is_empty():
 			return Vector2.ZERO
 			
-		# TODO: Implement proper interpolation
-		return waypoints[0].position
+		# 1. Check bounds
+		if time <= waypoints[0].time:
+			return waypoints[0].position
+		if time >= waypoints.back().time:
+			return waypoints.back().position
+			
+		# 2. Linear Search for the segment (can be optimized to binary search if needed)
+		for i in range(waypoints.size() - 1):
+			var current_wp = waypoints[i]
+			var next_wp = waypoints[i + 1]
+			
+			if time >= current_wp.time and time < next_wp.time:
+				# Calculate weight (0.0 to 1.0)
+				var t_diff = next_wp.time - current_wp.time
+				if t_diff <= 0: return current_wp.position
+				
+				var weight = (time - current_wp.time) / t_diff
+				return current_wp.position.lerp(next_wp.position, weight)
+				
+		return waypoints.back().position
 
 # --- Public API ---
 
