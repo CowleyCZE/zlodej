@@ -48,75 +48,41 @@ offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HeaderRow" type="HBoxContainer" parent="VBoxContainer/TopPanel/VBoxContainer"]
-layout_mode = 2
+[node name="MinimapContainer" type="Control" parent="VBoxContainer/TopPanel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -150.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 150.0
+grow_horizontal = 0
 
-[node name="StatusLabel" type="Label" parent="VBoxContainer/TopPanel/VBoxContainer/HeaderRow"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Plánování: Vila u Labe | Čas: 0.0s"
-
-[node name="TimelineLabel" type="Label" parent="VBoxContainer/TopPanel/VBoxContainer/HeaderRow"]
-layout_mode = 2
-text = "ČASOVÁ OSA:"
-
-[node name="TimelineSlider" type="HSlider" parent="VBoxContainer/TopPanel/VBoxContainer/HeaderRow"]
-custom_minimum_size = Vector2(300, 0)
-layout_mode = 2
-size_flags_vertical = 4
-max_value = 180.0
-step = 0.1
-show_percentage = false
-
-[node name="CharacterBar" type="HBoxContainer" parent="VBoxContainer/TopPanel/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="Label" type="Label" parent="VBoxContainer/TopPanel/VBoxContainer/CharacterBar"]
-layout_mode = 2
-text = "TÝM:"
-
-[node name="CharButtons" type="HBoxContainer" parent="VBoxContainer/TopPanel/VBoxContainer/CharacterBar"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="InfoRow" type="HBoxContainer" parent="VBoxContainer/TopPanel/VBoxContainer"]
-layout_mode = 2
-
-[node name="ActiveCharLabel" type="Label" parent="VBoxContainer/TopPanel/VBoxContainer/InfoRow"]
-layout_mode = 2
-text = "Aktivní: Žádná"
-
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/TopPanel/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="LogVBox" type="VBoxContainer" parent="VBoxContainer/TopPanel/VBoxContainer/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="MiddlePanel" type="Control" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 3.0
-
-[node name="Background" type="ColorRect" parent="VBoxContainer/MiddlePanel"]
+[node name="MinimapBG" type="ColorRect" parent="VBoxContainer/TopPanel/MinimapContainer"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.117647, 0.117647, 0.117647, 1)
+color = Color(0, 0, 0, 0.5)
 
-[node name="TileMap" type="TileMap" parent="VBoxContainer/MiddlePanel"]
-format = 2
+[node name="MinimapTexture" type="TextureRect" parent="VBoxContainer/TopPanel/MinimapContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
 
-[node name="GhostLinesLayer" type="Node2D" parent="VBoxContainer/MiddlePanel"]
-
-[node name="RouteLinesLayer" type="Node2D" parent="VBoxContainer/MiddlePanel"]
-
-[node name="EntitiesLayer" type="Node2D" parent="VBoxContainer/MiddlePanel"]
+[node name="ViewportRect" type="ReferenceRect" parent="VBoxContainer/TopPanel/MinimapContainer"]
+layout_mode = 0
+border_color = Color(1, 0, 0, 1)
+border_width = 2.0
+editor_only = false
 
 [node name="BottomMenu" type="ColorRect" parent="VBoxContainer"]
 clip_contents = true
@@ -139,59 +105,88 @@ stretch_mode = 6
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/BottomMenu"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -262.0
-offset_top = -20.0
-offset_right = 262.0
-offset_bottom = 20.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="BtnWalk" type="Button" parent="VBoxContainer/BottomMenu/HBoxContainer"]
-custom_minimum_size = Vector2(80, 40)
+[node name="DPadContainer" type="GridContainer" parent="VBoxContainer/BottomMenu/HBoxContainer"]
 layout_mode = 2
-text = "JÍT 🚶"
+size_flags_vertical = 4
+columns = 3
 
-[node name="BtnUse" type="Button" parent="VBoxContainer/BottomMenu/HBoxContainer"]
-custom_minimum_size = Vector2(80, 40)
+[node name="Empty1" type="Control" parent="VBoxContainer/BottomMenu/HBoxContainer/DPadContainer"]
+layout_mode = 2
+
+[node name="BtnUp" type="Button" parent="VBoxContainer/BottomMenu/HBoxContainer/DPadContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+text = "↑"
+
+[node name="Empty2" type="Control" parent="VBoxContainer/BottomMenu/HBoxContainer/DPadContainer"]
+layout_mode = 2
+
+[node name="BtnLeft" type="Button" parent="VBoxContainer/BottomMenu/HBoxContainer/DPadContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+text = "←"
+
+[node name="BtnDown" type="Button" parent="VBoxContainer/BottomMenu/HBoxContainer/DPadContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+text = "↓"
+
+[node name="BtnRight" type="Button" parent="VBoxContainer/BottomMenu/HBoxContainer/DPadContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+text = "→"
+
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/BottomMenu/HBoxContainer"]
+layout_mode = 2
+
+[node name="ActionsContainer" type="HBoxContainer" parent="VBoxContainer/BottomMenu/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="BtnUse" type="Button" parent="VBoxContainer/BottomMenu/HBoxContainer/ActionsContainer"]
+custom_minimum_size = Vector2(80, 64)
 layout_mode = 2
 text = "POUŽÍT 🛠️"
 
-[node name="BtnWait" type="Button" parent="VBoxContainer/BottomMenu/HBoxContainer"]
-custom_minimum_size = Vector2(80, 40)
+[node name="BtnOpen" type="Button" parent="VBoxContainer/BottomMenu/HBoxContainer/ActionsContainer"]
+custom_minimum_size = Vector2(80, 64)
+layout_mode = 2
+text = "OTEVŘÍT 🚪"
+
+[node name="BtnPick" type="Button" parent="VBoxContainer/BottomMenu/HBoxContainer/ActionsContainer"]
+custom_minimum_size = Vector2(80, 64)
+layout_mode = 2
+text = "PÁČIT 🔓"
+
+[node name="BtnWait" type="Button" parent="VBoxContainer/BottomMenu/HBoxContainer/ActionsContainer"]
+custom_minimum_size = Vector2(80, 64)
 layout_mode = 2
 text = "ČEKAT ⏳"
 
-[node name="BtnGuard" type="Button" parent="VBoxContainer/BottomMenu/HBoxContainer"]
-custom_minimum_size = Vector2(80, 40)
+[node name="VSeparator2" type="VSeparator" parent="VBoxContainer/BottomMenu/HBoxContainer"]
 layout_mode = 2
-text = "STRÁŽE 👮"
 
-[node name="BtnSimulate" type="Button" parent="VBoxContainer/BottomMenu/HBoxContainer"]
-custom_minimum_size = Vector2(80, 40)
+[node name="SimContainer" type="HBoxContainer" parent="VBoxContainer/BottomMenu/HBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="BtnSimulate" type="Button" parent="VBoxContainer/BottomMenu/HBoxContainer/SimContainer"]
+custom_minimum_size = Vector2(100, 64)
 layout_mode = 2
 text = "SIMULACE 📽️"
 
-[node name="BtnInspect" type="Button" parent="VBoxContainer/BottomMenu/HBoxContainer"]
-custom_minimum_size = Vector2(80, 40)
-layout_mode = 2
-text = "PROZK. 🔍"
-
-[node name="BtnSave" type="Button" parent="VBoxContainer/BottomMenu/HBoxContainer"]
-custom_minimum_size = Vector2(80, 40)
-layout_mode = 2
-text = "ULOŽIT 💾"
-
-[node name="BtnExecute" type="Button" parent="VBoxContainer/BottomMenu/HBoxContainer"]
-custom_minimum_size = Vector2(80, 40)
+[node name="BtnExecute" type="Button" parent="VBoxContainer/BottomMenu/HBoxContainer/SimContainer"]
+custom_minimum_size = Vector2(100, 64)
 layout_mode = 2
 text = "PROVÉST 🕶️"
 
-[connection signal="pressed" from="VBoxContainer/BottomMenu/HBoxContainer/BtnWalk" to="." method="_on_BtnWalk_pressed"]
-[connection signal="pressed" from="VBoxContainer/BottomMenu/HBoxContainer/BtnSimulate" to="." method="_on_BtnSimulate_pressed"]
+
